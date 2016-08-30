@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Index</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Include jQuery Mobile stylesheets -->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+    <!-- Include the jQuery library -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- Include the jQuery Mobile library -->
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script src="/Scripts/jqmNestedLists.js"></script>
+
+</head>
+<body>
+
+
+    <form id="indexform">
+        <!--==================================================the login page==========================================-->
+
+        <div data-role="page" id="login" data-theme="a">
+            <div data-role="header" data-position="fixed">
+
+                <h1>"Top Shop"</h1>
+            </div>
+
+
+            <div data-role="content">
+                <div role="main" class="ui-content">
+                    <h2 class="mc-text-center">Welcome!</h2>
+                    <p class="mc-top-margin-1-5"><b>Existing Users</b></p>
+                    <a href="#signin" class="ui-btn ui-btn-b ui-corner-all">Sign In</a>
+                    <p class="mc-top-margin-1-5"><b>Don't have an account?</b></p>
+                    <a href="#signup" class="ui-btn ui-btn-b ui-corner-all">Sign Up</a>
+                    <p class="mc-top-margin-1-5"><a href="#home">Enter as guest</a></p>
+                    <p></p>
+                </div>
+            </div>
+
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+        </div>
+        <!--==================================================the login page==========================================-->
+        <!--==================================================the signin page==========================================-->
+
+
+        <div data-role="page" id="signin" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+
+
+            </div>
+
+            <div data-role="content">
+                <div role="main" class="ui-content">
+                    <h3>Sign In</h3>
+                    <label for="txt-email">Email Address</label>
+                    <asp:TextBox  name="txt-email" ID="txtemail" value=""> </asp:TextBox>
+                    <label for="txt-password">Password</label>
+                    <input id="txtpassword" type="text" />
+
+
+                    <fieldset data-role="controlgroup">
+                        <input type="checkbox" name="chck-rememberme" id="chck-rememberme" checked="" />
+                        <label for="chck-rememberme">Remember me</label>
+                    </fieldset>
+
+
+                    <a href="#dlg-invalid-credentials" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
+                    <p class="mc-top-margin-1-5"><a href="begin-password-reset.html">Can't access your account?</a></p>
+                    <p class="mc-top-margin-1-5"><a href="#home">Enter as guest</a></p>
+                    <div data-role="popup" id="dlg-invalid-credentials" data-dismissible="false" style="max-width: 400px;">
+                        <div role="main" class="ui-content">
+                            <h3 class="mc-text-danger">Login Failed</h3>
+                            <p>Did you enter the right credentials?</p>
+                            <div class="mc-text-center"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
+        <!--==================================================the signin page==========================================-->
+        <!--==================================================the signup page==========================================-->
+
+
+        <div data-role="page" id="signup" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+
+
+            </div>
+
+            <div data-role="content">
+
+                div role="main" class="ui-content">
+                <h3>Sign Up</h3>
+                <label for="txt-first-name">First Name</label>
+                <input type="text" name="txt-first-name" id="txt-first-name" value="">
+                <label for="txt-last-name">Last Name</label>
+                <input type="text" name="txt-last-name" id="txt-last-name" value="">
+                <label for="txt-email">Email Address</label>
+                <input type="text" name="txt-email" id="txt-email" value="">
+                <label for="txt-password">Password</label>
+                <input type="password" name="txt-password" id="txt-password" value="">
+                <label for="txt-password-confirm">Confirm Password</label>
+                <input type="password" name="txt-password-confirm" id="txt-password-confirm" value="">
+                <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
+                <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
+                    <div data-role="header">
+                        <h1>Almost done...</h1>
+                    </div>
+                    <div role="main" class="ui-content">
+                        <h3>Confirm Your Email Address</h3>
+                        <p>We sent you an email with instructions on how to confirm your email address. Please check your inbox and follow the instructions in the email.</p>
+                        <div class="mc-text-center"><a href="sign-in.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
+                    </div>
+                </div>
+            </div>
+
+
+          
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
+        <!--==================================================the signup page==========================================-->
+        <!--==================================================the home page==========================================-->
+
+        <div data-role="page" id="home" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>"Top Shop"</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#home" class="ui-state-persist">Home</a></li>
+                        <li><a href="#shop">Shop</a></li>
+                        <li><a href="#yad2">yad2</a></li>
+                        <li><a href="#cart">Cart</a></li>
+                        <li><a href="#login">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div data-role="content">
+
+                <div>
+                    <h2 class="mc-text-center">Welcome To Top Shop!</h2>
+                    <img src="Pics/shop.png" data-inset="true" />
+                </div>
+
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
+
+        <!--==================================================the home page==========================================-->
+        <!--==================================================the shop page==========================================-->
+
+        <div data-role="page" id="shop" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>"Top Shop"</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#shop" class="ui-state-persist">Shop</a></li>
+                        <li><a href="#yad2">yad2</a></li>
+                        <li><a href="#cart">Cart</a></li>
+                        <li><a href="#login">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div data-role="content">
+                <div data-role="main" class="ui-content">
+                    <h2>Product Catagories</h2>
+                    <ul data-role="listview" data-inset="false">
+                        <li>
+                            <a href="#products">
+                                <img src="Pics/catagories/Clean.jpg" />
+                                <h2>Topic 1</h2>
+                                <p>This is Topic 1 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#products">
+                                <img src="Pics/catagories/gen.jpg" />
+                                <h2>Topic 2</h2>
+                                <p>This is Topic 2 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#products">
+                                <img src="Pics/catagories/Generic-products.jpg" />
+                                <h2>Topic 2</h2>
+                                <p>This is Topic 2 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#products">
+                                <img src="Pics/catagories/generic-tp.jpg" />
+                                <h2>Topic 2</h2>
+                                <p>This is Topic 2 Description</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
+        <!--==================================================the shop page==========================================-->
+        <!--==================================================the yad2 page==========================================-->
+
+        <!--==================================================the yad2 page==========================================-->
+        <!--==================================================the cart page==========================================-->
+
+        <!--==================================================the cart page==========================================-->
+        <!--==================================================the products page==========================================-->
+        <div data-role="page" id="products" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>"Top Shop"</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#shop" class="ui-state-persist">Shop</a></li>
+                        <li><a href="#yad2">yad2</a></li>
+                        <li><a href="#cart">Cart</a></li>
+                        <li><a href="#login">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div data-role="content">
+
+                <div data-role="main" class="ui-content">
+                    <h2>Product Catagories</h2>
+                    <ul data-role="listview" data-inset="false">
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/beer-generic.jpg" />
+                                <h2>Product 1</h2>
+                                <p>This is Product 1 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/cola.jpg" />
+                                <h2>Product 2</h2>
+                                <p>This is Product 2 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/water.jpg" />
+                                <h2>Product 3</h2>
+                                <p>This is Product 3 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/wine.jpg" />
+                                <h2>Product 4</h2>
+                                <p>This is Product 4 Description</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+        <!--==================================================the products page==========================================-->
+        <!--==================================================the productDescription page==========================================-->
+        <div data-role="page" id="ProductDiscription" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>"Top Shop"</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#shop" class="ui-state-persist">Shop</a></li>
+                        <li><a href="#yad2">yad2</a></li>
+                        <li><a href="#cart">Cart</a></li>
+                        <li><a href="#login">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div data-role="content">
+
+                <div>
+                    <h2 class="mc-text-center">This is Product Description</h2>
+                    <img src="Pics/products/generic.jpg" style="width: 100%;" />
+                    <h3 class="mc-text-center">bla bla bla</h3>
+                </div>
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
+        <!--==================================================the productDescription page==========================================-->
+
+
+
+
+
+
+
+    </form>
+</body>
+</html>
