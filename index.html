@@ -20,23 +20,28 @@
         <!--==================================================the login page==========================================-->
 
         <div data-role="page" id="login" data-theme="a">
+
             <div data-role="header" data-position="fixed">
 
                 <h1>Top Shop</h1>
             </div>
 
-
             <div data-role="content">
                 <div role="main" class="ui-content">
-                    <h2 class="mc-text-center">Welcome!</h2>
+                    <h2 class="mc-text-center">Welcome to "Top Shop"!</h2>
                     <p class="mc-top-margin-1-5"><b>Existing Users</b></p>
                     <a href="#signin" class="ui-btn ui-btn-b ui-corner-all">Sign In</a>
                     <p class="mc-top-margin-1-5"><b>Don't have an account?</b></p>
                     <a href="#signup" class="ui-btn ui-btn-b ui-corner-all">Sign Up</a>
-                    <p class="mc-top-margin-1-5"><a href="#home">Enter as guest</a></p>
+                    <p class="mc-top-margin-1-5"><a href="#shop">Enter as guest</a></p>
                     <p></p>
                 </div>
             </div>
+
+            <div style="text-align : center;">
+                <img src="Pics/shop_grey.jpg" />
+            </div>
+            
 
 
             <div data-role="footer" data-position="fixed">
@@ -72,7 +77,7 @@
 
                     <a href="#dlg-invalid-credentials" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
                     <p class="mc-top-margin-1-5"><a href="begin-password-reset.html">Can't access your account?</a></p>
-                    <p class="mc-top-margin-1-5"><a href="#home">Enter as guest</a></p>
+                    <p class="mc-top-margin-1-5"><a href="#shop">Enter as guest</a></p>
                     <div data-role="popup" id="dlg-invalid-credentials" data-dismissible="false" style="max-width: 400px;">
                         <div role="main" class="ui-content">
                             <h3 class="mc-text-danger">Login Failed</h3>
@@ -142,19 +147,20 @@
         </div>
 
         <!--==================================================the signup page==========================================-->
-        <!--==================================================the home page==========================================-->
+        <!--==================================================the Order page==========================================-->
 
         <div data-role="page" id="home" data-theme="a">
 
             <div data-role="header" data-position="fixed">
-                <h1>"Top Shop"</h1>
+                <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
                     <!-- /navbar -->
                     <ul>
-                        <li><a href="#home" class="ui-state-persist">Home</a></li>
+                        
                         <li><a href="#shop">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
                         <li><a href="#cart">Cart</a></li>
+                        <li><a href="#orders" class="ui-state-persist">Orders</a></li>
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
@@ -179,20 +185,20 @@
         </div>
 
 
-        <!--==================================================the home page==========================================-->
+        <!--==================================================the Order page==========================================-->
         <!--==================================================the shop page==========================================-->
 
         <div data-role="page" id="shop" data-theme="a">
 
             <div data-role="header" data-position="fixed">
-                <h1>"Top Shop"</h1>
+                <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
                     <!-- /navbar -->
                     <ul>
-                        <li><a href="#home">Home</a></li>
                         <li><a href="#shop" class="ui-state-persist">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
                         <li><a href="#cart">Cart</a></li>
+                        <li><a href="#orders">Orders</a></li>
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
@@ -248,19 +254,85 @@
         <!--==================================================the yad2 page==========================================-->
         <!--==================================================the yad2 page==========================================-->
         <!--==================================================the cart page==========================================-->
+        <div data-role="page" id="cart" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>Top Shop</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#shop">Shop</a></li>
+                        <li><a href="#yad2">yad2</a></li>
+                        <li><a href="#cart" class="ui-state-persist">Cart</a></li>
+                        <li><a href="#orders">Orders</a></li>
+                        <li><a href="#login">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div data-role="content">
+                <div role="main" class="ui-content">
+                    <h3>Selected Products</h3>
+                    <ul data-role="listview" data-inset="false" data-icon="delete">
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/beer-generic.jpg" />
+                                <h2>Product 1</h2>
+                                <p>This is Product 1 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/cola.jpg" />
+                                <h2>Product 2</h2>
+                                <p>This is Product 2 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/water.jpg" />
+                                <h2>Product 3</h2>
+                                <p>This is Product 3 Description</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ProductDiscription">
+                                <img src="Pics/products/wine.jpg" />
+                                <h2>Product 4</h2>
+                                <p>This is Product 4 Description</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <fieldset data-role="controlgroup">
+                        <p class="mc-top-margin-1-5"><b>Total of 999$</b></p>
+                        <a href="#pay" class="ui-btn ui-btn-b ui-corner-all">Pay</a>
+
+                    </fieldset>
+                </div>
+
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
         <!--==================================================the cart page==========================================-->
         <!--==================================================the products page==========================================-->
         <div data-role="page" id="products" data-theme="a">
 
             <div data-role="header" data-position="fixed">
-                <h1>"Top Shop"</h1>
+                <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
                     <!-- /navbar -->
                     <ul>
-                        <li><a href="#home">Home</a></li>
                         <li><a href="#shop" class="ui-state-persist">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
                         <li><a href="#cart">Cart</a></li>
+                        <li><a href="#orders">Orders</a></li>
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
@@ -270,7 +342,7 @@
             <div data-role="content">
 
                 <div data-role="main" class="ui-content">
-                    <h2>Product Catagories</h2>
+                    <h2>Products</h2>
                     <ul data-role="listview" data-inset="false">
                         <li>
                             <a href="#ProductDiscription">
@@ -317,14 +389,14 @@
         <div data-role="page" id="ProductDiscription" data-theme="a">
 
             <div data-role="header" data-position="fixed">
-                <h1>"Top Shop"</h1>
+                <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
                     <!-- /navbar -->
                     <ul>
-                        <li><a href="#home">Home</a></li>
                         <li><a href="#shop" class="ui-state-persist">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
                         <li><a href="#cart">Cart</a></li>
+                        <li><a href="#orders">Orders</a></li>
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
@@ -349,8 +421,61 @@
         </div>
 
         <!--==================================================the productDescription page==========================================-->
+        <!--==================================================the pay page==========================================-->
+
+        <div data-role="page" id="pay" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>Top Shop</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#shop" class="ui-state-persist">Shop</a></li>
+                        <li><a href="#yad2">yad2</a></li>
+                        <li><a href="#cart">Cart</a></li>
+                        <li><a href="#orders">Orders</a></li>
+                        <li><a href="#login">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div data-role="content">
+
+                <h4>User Information</h4>
+
+                <label for="txt-first-name">First Name</label>
+                <input type="text" name="txt-first-name" id="txt-first-name" value="">
+                <label for="txt-last-name">Last Name</label>
+                <input type="text" name="txt-last-name" id="txt-last-name" value="">
 
 
+                <h4>Credit Card Information</h4>
+
+                <label for="txt-email">Credit Card Number</label>
+                <input type="text" name="txt-credit" id="txt-credit" value="" placeholder="1234 5678 9012 3456">
+                <label for="txt-password">Expiration Date</label>
+                <input type="text" name="txt-date" id="txt-date" value="" placeholder="mm/yy">
+
+
+                <fieldset data-role="controlgroup">
+                    <p class="mc-top-margin-1-5"><b>Total of 999$</b></p>
+                    <a href="#pay" class="ui-btn ui-btn-b ui-corner-all">Pay</a>
+                </fieldset>
+
+
+
+            </div>
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
+
+
+        <!--==================================================the pay page==========================================-->
     </form>
 </body>
 </html>
