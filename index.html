@@ -24,7 +24,7 @@
         <div data-role="page" id="login" data-theme="a">
             <div data-role="header" data-position="fixed">
 
-                <h1>"Top Shop"</h1>
+                <h1>Top Shop</h1>
             </div>
 
 
@@ -53,7 +53,7 @@
         <div data-role="page" id="signin" data-theme="a">
 
             <div data-role="header" data-position="fixed">
-
+                <h1>Top Shop</h1>
 
             </div>
 
@@ -61,9 +61,9 @@
                 <div role="main" class="ui-content">
                     <h3>Sign In</h3>
                     <label for="txt-email">Email Address</label>
-                    <asp:TextBox  name="txt-email" ID="txtemail" value=""> </asp:TextBox>
+                    <input type="text" name="txt-email" id="txt-email" value="">
                     <label for="txt-password">Password</label>
-                    <input id="txtpassword" type="text" />
+                    <input type="password" name="txt-password" id="txt-password" value="">
 
 
                     <fieldset data-role="controlgroup">
@@ -101,39 +101,40 @@
         <div data-role="page" id="signup" data-theme="a">
 
             <div data-role="header" data-position="fixed">
-
+                <h1>Top Shop</h1>
 
             </div>
 
             <div data-role="content">
 
-                div role="main" class="ui-content">
-                <h3>Sign Up</h3>
-                <label for="txt-first-name">First Name</label>
-                <input type="text" name="txt-first-name" id="txt-first-name" value="">
-                <label for="txt-last-name">Last Name</label>
-                <input type="text" name="txt-last-name" id="txt-last-name" value="">
-                <label for="txt-email">Email Address</label>
-                <input type="text" name="txt-email" id="txt-email" value="">
-                <label for="txt-password">Password</label>
-                <input type="password" name="txt-password" id="txt-password" value="">
-                <label for="txt-password-confirm">Confirm Password</label>
-                <input type="password" name="txt-password-confirm" id="txt-password-confirm" value="">
-                <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
-                <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
-                    <div data-role="header">
-                        <h1>Almost done...</h1>
-                    </div>
-                    <div role="main" class="ui-content">
-                        <h3>Confirm Your Email Address</h3>
-                        <p>We sent you an email with instructions on how to confirm your email address. Please check your inbox and follow the instructions in the email.</p>
-                        <div class="mc-text-center"><a href="sign-in.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
+                <div role="main" class="ui-content">
+                    <h3>Sign Up</h3>
+                    <label for="txt-first-name">First Name</label>
+                    <input type="text" name="txt-first-name" id="txt-first-name" value="">
+                    <label for="txt-last-name">Last Name</label>
+                    <input type="text" name="txt-last-name" id="txt-last-name" value="">
+                    <label for="txt-email">Email Address</label>
+                    <input type="text" name="txt-email" id="txt-email" value="">
+                    <label for="txt-password">Password</label>
+                    <input type="password" name="txt-password" id="txt-password" value="">
+                    <label for="txt-password-confirm">Confirm Password</label>
+                    <input type="password" name="txt-password-confirm" id="txt-password-confirm" value="">
+                    <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
+                    <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
+                        <div data-role="header">
+                            <h1>Almost done...</h1>
+                        </div>
+                        <div role="main" class="ui-content">
+                            <h3>Confirm Your Email Address</h3>
+                            <p>We sent you an email with instructions on how to confirm your email address. Please check your inbox and follow the instructions in the email.</p>
+                            <div class="mc-text-center"><a href="sign-in.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
 
-          
+
 
             <div data-role="footer" data-position="fixed">
 
@@ -247,10 +248,8 @@
 
         <!--==================================================the shop page==========================================-->
         <!--==================================================the yad2 page==========================================-->
-
         <!--==================================================the yad2 page==========================================-->
         <!--==================================================the cart page==========================================-->
-
         <!--==================================================the cart page==========================================-->
         <!--==================================================the products page==========================================-->
         <div data-role="page" id="products" data-theme="a">
@@ -352,11 +351,6 @@
         </div>
 
         <!--==================================================the productDescription page==========================================-->
-
-
-
-
-
 
 
     </form>
