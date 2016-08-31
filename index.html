@@ -3,14 +3,50 @@
 <head>
     <title>Index</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <!-- Include jQuery Mobile stylesheets -->
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-
     <!-- Include the jQuery library -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <!-- Include the jQuery Mobile library -->
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="/Scripts/jqmNestedLists.js"></script>
+    <script type="text/javascript">
+        //________________signup page________________//
+        $(document).on("pageinit", "#signup", function (event) {
+            wireEventsOrderPage();
+        });
+        function wireEventsOrderPage() {
+
+
+            $('#btnsubmit').on('tap', function () {
+                debugger;
+                var FirstName = $('#txt-first-name').val();
+                var LastName = $('#txt-last-name').val();
+                var Email = $('#txt-email').val();
+                var Password = $('#txt-password-confirm').val();
+                var J = { FirstName: FirstName, LastName: LastName, Email: Email, Password: Password };
+                WebServiceURL = "WebService.asmx";
+                $.support.cors = true;
+                $.ajax({
+                    url: WebServiceURL + "/SignUser",
+                    dataType: "json",
+                    type: "POST",
+                    data: JSON.stringify(J),
+                    contentType: "application/json; charset=utf-8",
+                    error: function (err) {
+                        alert("errornir: " + JSON.stringify(err));
+                    },
+                    success: function (data) {
+                        if (data["d"] == 1) {
+                            alert('SUCCESS: ' + data["d"] + ' rows');
+                        }
+                    }
+                });
+            });
+        }
+
+
+    </script>
 
 </head>
 <body>
@@ -100,7 +136,7 @@
         <!--==================================================the signin page==========================================-->
         <!--==================================================the signup page==========================================-->
 
-
+        
         <div data-role="page" id="signup" data-theme="a">
 
             <div data-role="header" data-position="fixed">
@@ -145,6 +181,44 @@
             </div>
 
         </div>
+
+        <!--
+             <div data-role="page" id="signup" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+
+
+            </div>
+
+            <div data-role="content">
+
+                
+                <h3>Sign Up</h3>
+                <label for="txt-first-name">First Name</label>
+                <input id="txt-first-name" type="text" />
+                <label for="txt-last-name">Last Name</label>
+                <input id="txt-last-name" type="text" />
+                <label for="txt-email">Email Address</label>
+                <input id="txt-email" type="text" />
+                <label for="txt-password">Password</label>
+                <input id="txt-password" type="text" />
+                <label for="txt-password-confirm">Confirm Password</label>
+                <input id="txt-password-confirm" type="text" />
+                <input onclick="location.href='#shop'" id="btnsubmit" type="button" value="submit" />  
+                
+            </div>
+
+
+
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
+
+        -->
 
         <!--==================================================the signup page==========================================-->
         <!--==================================================the Order page==========================================-->
