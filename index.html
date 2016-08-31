@@ -41,7 +41,7 @@
             <div style="text-align : center;">
                 <img src="Pics/shop_grey.jpg" />
             </div>
-            
+
 
 
             <div data-role="footer" data-position="fixed">
@@ -156,7 +156,7 @@
                 <div data-role="navbar" class="flow" data-position="fixed">
                     <!-- /navbar -->
                     <ul>
-                        
+
                         <li><a href="#shop">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
                         <li><a href="#cart">Cart</a></li>
@@ -252,6 +252,65 @@
 
         <!--==================================================the shop page==========================================-->
         <!--==================================================the yad2 page==========================================-->
+        <div data-role="page" id="yad2" data-theme="a">
+
+            <div data-role="header" data-position="fixed">
+                <h1>Top Shop</h1>
+
+            </div>
+
+            <div data-role="content">
+
+                <div role="main" class="ui-content">
+                    <h3>Add Your Product</h3>
+                    <div class="ui-field-contain">
+                        <label for="select-native-1">Choose Categories:</label>
+                        <select name="select-native-1" id="select-native-1">
+                            <option value="1">The 1st Option</option>
+                            <option value="2">The 2nd Option</option>
+                            <option value="3">The 3rd Option</option>
+                            <option value="4">The 4th Option</option>
+                        </select>
+                    </div>
+
+
+
+                    <label for="txt-last-name">Product Description</label>
+                    <input type="text" name="txt-pdescription" id="txt-pdescription" value="">
+                    <label for="txt-email">Product Price</label>
+                    <input type="text" name="txt-price" id="txt-price" value="">
+                    <label for="txt-email">Phone Number</label>
+                    <input type="text" name="txt-price" id="txt-price" value="">
+                    <label for="txt-password">Add Photo</label>
+                    <div style="text-align : center;">
+                        <img src="Pics/addpic.png" height="150" width="150" />
+                    </div>
+
+                    <input type="file" name="image" accept="image/*" capture>
+
+                    <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
+                    <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
+                        <div data-role="header">
+                            <h1>Almost done...</h1>
+                        </div>
+                        <div role="main" class="ui-content">
+                            <h3>Confirm Your Email Address</h3>
+                            <p>We sent you an email with instructions on how to confirm your email address. Please check your inbox and follow the instructions in the email.</p>
+                            <div class="mc-text-center"><a href="sign-in.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div data-role="footer" data-position="fixed">
+
+                <h1>TM Yoni&Ohad</h1>
+            </div>
+
+        </div>
         <!--==================================================the yad2 page==========================================-->
         <!--==================================================the cart page==========================================-->
         <div data-role="page" id="cart" data-theme="a">
