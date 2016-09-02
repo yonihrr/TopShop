@@ -29,7 +29,7 @@ public class WebService : System.Web.Services.WebService {
     public int SignUser(string FirstName, string LastName, string Email, string Password)
     {
 
-        string conStr = @"Data Source=DESKTOP-L3OV7JP\SQLEXPRESS;Initial Catalog=TopShop;Integrated Security=True";
+        string conStr = @"Data Source=DESKTOP-Q4MIT7O\SQLEXPRESS;Initial Catalog=TopShop;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False";
         SqlConnection con = new SqlConnection(conStr);
         SqlCommand com = new SqlCommand("INSERT INTO Users (FirstName,LastName,Email,Password) VALUES('" + FirstName + "','" + LastName + "','" + Email + "','" + Password + "')", con);
         com.Connection.Open();
