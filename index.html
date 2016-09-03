@@ -45,12 +45,8 @@
     <link href="jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
     <script src="jquery/jquery-1.12.4.min.js"></script>
     <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
-    
-    <!---
-    <script src="/Scripts/jqmNestedLists.js"></script>
-
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-     -->    
+ 
     <script type="text/javascript">
         //________________signup page________________//
         $(document).on("pageinit", "#signup", function (event) {          
@@ -218,47 +214,38 @@
     </script>
 
     
-    <script type="text/javascript">
+    <script>
+    function onSuccessCamera(imageURI) {
+        //alert("Success");
+        var image = $('#imgPH');
+        image.attr('src', imageURI);
+        location.href = '#yad2';
+    }
 
-    $(document).on("pageinit", "#yad2", function (event) {
-        wireEventsYad2Page();
-    });
-
-
-    function wireEventsYad2Page() {
-        alert("yad2 page");
-        function camSuccess(imgData) {
-            alert("camSuc")
-            $("#img_camPH").atrr("src", imgData);
-        }
-
-        function camError(error) {
-            alert("CamError");
-        }
-
-        function accessCamera() {
-            alert("in accessCamera");
-            var options = {
-
-                detinationType: Camera.destinationType.FILE_URI,
-                sourceType: Camera.PictureSourceType.CAMERA
-            }
-            navigator.camera.getPicture(camSuccess, camError, options);
-
-        }
-
-        function test() {
-            alert("in test func")
-            accessCamera();
-        }
-
-        $("#btn_camera").on("click", accessCamera);
-        $("#btn_cam_test").on("click", accessCamera);
+    function onFailCamera(message) {
+        //alert('Failed because: ' + message);
+        location.href = '#yad2';
     }
 
 
+    $(document).on("pagecreate", "#yad2", function () {
+
+        $('#btnCamera').tap(function () {
+
+            navigator.camera.getPicture(onSuccessCamera, onFailCamera, {
+                quality: 50,
+                destinationType: Camera.DestinationType.FILE_URI
+
+            });
+            location.href = '#yad2';
+        });
+        location.href = '#yad2';
+    });
 
     </script>
+
+
+
 
          
 </head>
@@ -517,15 +504,18 @@
                     <label for="txt-email">Phone Number</label>
                     <input type="text" name="txt-price" id="txt-price" value="">
                     <label for="txt-password">Add Photo</label>
+                    
                     <div style="text-align : center;">
                         <img id="imgPH" src="Pics/addpic.png" height="150" width="150" />
                     </div>
                     <button id="btnCamera">Camera</button>
+                    
+                    
                     <i class="fa fa-camera-retro fa-2x myIcon" title="Edit"></i>  <!--comment to your right=> -->                     <!--all 4 comment are the part-->
                     <input type="file" id="fileUpload" name="image" accept="image/*" capture>                                         <!--for the up load image -->
-                    <!--<a href="#" id="btn_cam_test class=" ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>-->           <!--in web server need to update-->
+                  
                     <input id="btn" type="button" value="CamSubmit" />                                                                   <!--the folder to save image -->
-                    <
+                    
 
                     <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
                     <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
