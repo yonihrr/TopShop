@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Index</title>
-
-    <meta charset="utf-8" />
+  <!--  <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+   
     <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
     <!--
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
@@ -26,20 +26,35 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    -->
+    --><!--
     <link href="jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
     <script src="jquery/jquery-1.12.4.min.js"></script>
     <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+     
+    <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+ -->
 
-    <!--
+    <link href="http://hayageek.github.io/jQuery-Upload-File/4.0.10/uploadfile.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://hayageek.github.io/jQuery-Upload-File/4.0.10/jquery.uploadfile.min.js"></script>
+     
+
+    <link href="jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+    <script src="jquery/jquery-1.12.4.min.js"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+    
+    <!---
     <script src="/Scripts/jqmNestedLists.js"></script>
 
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-     -->
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+     -->    
     <script type="text/javascript">
         //________________signup page________________//
-        $(document).on("pageinit", "#signup", function (event) {
+        $(document).on("pageinit", "#signup", function (event) {          
+            debugger;
             wireEventsOrderPage();
         });
         function wireEventsOrderPage() {
@@ -72,10 +87,11 @@
             });
         }
 
-
+        //________________signup page end________________//
     </script>
+   <script>
+        //________________yad2create page________________//
 
-    <script>
         function onSuccessCamera(imageURI) {
             //alert("Success");
             var image = $('#imgPH');
@@ -89,8 +105,8 @@
         }
 
 
-        $(document).on("pagecreate", "#yad2", function () {
-
+        $(document).on("pagecreate", "#yad2create", function () {
+            $('#btn').click(upload);
             $('#btnCamera').tap(function () {
 
                 navigator.camera.getPicture(onSuccessCamera, onFailCamera, {
@@ -103,8 +119,33 @@
             location.href = '#yad2';
         });
 
-    </script>
+        function upload() {
+            var data = new FormData(),
+            file = $("#fileUpload")[0].files[0];
 
+            //data.append("name", file.name);
+            //data.append("size", file.size);
+            //data.append("type", file.type);
+            data.append("file", file);
+            //data.append("UploadedFile", path);
+
+            //Make Ajax request with the contentType = false, and procesDate = false
+            $.ajax({
+                type: 'POST',
+                url: 'WebService.asmx/UploadFile',
+                data: data,
+                async: false,
+                success: function (data) {
+                    alert(data)
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+
+        }
+        //________________yad2create page end________________//
+    </script>
 
     <script>
 
@@ -127,19 +168,56 @@
                 var number = "1234567890";
                 bypassAppChooser = true;
                 window.plugins.CallNumber.callNumber(onSuccessDialer, onErrorDialer, number, bypassAppChooser);
-
-                });
                 location.href = '#ProductDiscription';
             });
             location.href = '#ProductDiscription';
-    
+        });
 
+    </script>
+    <script>
+        //____________yad2______________//
+        ;
+        $(document).ready(function () {
+            getdata();
+            
+        });
+        function getdata() {
+            WebServiceURL = "WebService.asmx"
+            $.ajax(
+                {
+                    url: WebServiceURL + "/GetAllUsers",
+                    dataType: "json",
+                    type: "POST", //use only POST!
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    error: function (jqXHR, exception) {
+                        alert(formatErrorMessage(jqXHR, exception));
+                    },
+                    success: function (data) {
+                        var UsersObj = JSON.parse(data.d); //or data["d"]
+                        var resStr = '';
+                        debugger;
+                       // if (!listCreated) {
 
+                            for (var i = 0; i < UsersObj.length; i++) {
+                                resStr += UsersObj[i].Id + ", " + UsersObj[i].Name + "<br\>";
+                                $("#yad2").append("<ul id='list' data-role='listview' data-inset='true'></ul>");
+                                listCreated = true;
+                                $("#yad2").trigger("create");
+
+                                $("#yad2").append("<li>  <div> <h2 class=" + "mc-text-center" + ">" + UsersObj[i].Id + "</h2> <img src=" + "Pics/shop.png" + " width=" + "42" + "height=" + "42" + " /> <h3 class=" + "mc-text-center" + ">" + UsersObj[i].Name + "</h3> </div> </li>");
+                                //$("#list").listview("refresh");
+                            }
+                      //  }
+                        // $('#res').html(resStr);
+                    }
+                })
+        }
+        //____________________yad2 end______________________//
 
     </script>
 
-
-    <!--
+    
     <script type="text/javascript">
 
     $(document).on("pageinit", "#yad2", function (event) {
@@ -182,22 +260,16 @@
 
     </script>
 
-         -->
-
+         
 </head>
 <body>
 
-
     <form id="indexform">
         <!--==================================================the login page==========================================-->
-
         <div data-role="page" id="login" data-theme="a">
-
             <div data-role="header" data-position="fixed">
-
                 <h1>Top Shop</h1>
             </div>
-
             <div data-role="content">
                 <div role="main" class="ui-content">
                     <h2 class="mc-text-center">Welcome to "Top Shop"!</h2>
@@ -209,29 +281,21 @@
                     <p></p>
                 </div>
             </div>
-
             <div style="text-align : center;">
                 <img src="Pics/shop_grey.jpg" />
             </div>
 
-
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
         </div>
         <!--==================================================the login page==========================================-->
         <!--==================================================the signin page==========================================-->
 
-
         <div data-role="page" id="signin" data-theme="a">
-
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
-
             </div>
-
             <div data-role="content">
                 <div role="main" class="ui-content">
                     <h3>Sign In</h3>
@@ -240,12 +304,10 @@
                     <label for="txt-password">Password</label>
                     <input type="password" name="txt-password" id="txt-password" value="">
 
-
                     <fieldset data-role="controlgroup">
                         <input type="checkbox" name="chck-rememberme" id="chck-rememberme" checked="" />
                         <label for="chck-rememberme">Remember me</label>
                     </fieldset>
-
 
                     <a href="#dlg-invalid-credentials" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
                     <p class="mc-top-margin-1-5"><a href="begin-password-reset.html">Can't access your account?</a></p>
@@ -259,16 +321,11 @@
                     </div>
                 </div>
 
-
             </div>
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
-
         <!--==================================================the signin page==========================================-->
         <!--==================================================the signup page==========================================-->
         <!--
@@ -320,16 +377,11 @@
 
                 </div>
         -->
-
         <div data-role="page" id="signup" data-theme="a">
-
             <div data-role="header" data-position="fixed">
 
-
             </div>
-
             <div data-role="content">
-
 
                 <h3>Sign Up</h3>
                 <label for="txt-first-name">First Name</label>
@@ -343,32 +395,22 @@
                 <label for="txt-password-confirm">Confirm Password</label>
                 <input id="txt-password-confirm" type="text" />
                 <input onclick="location.href='#shop'" id="btnsubmit" type="button" value="submit" />
-
             </div>
-
-
 
 
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
-
-
 
         <!--==================================================the signup page==========================================-->
         <!--==================================================the Order page==========================================-->
-
         <div data-role="page" id="home" data-theme="a">
-
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
                     <!-- /navbar -->
                     <ul>
-
                         <li><a href="#shop">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
                         <li><a href="#cart">Cart</a></li>
@@ -376,32 +418,22 @@
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
-
             </div>
-
             <div data-role="content">
-
                 <div>
                     <h2 class="mc-text-center">Welcome To Top Shop!</h2>
                     <img src="Pics/shop.png" data-inset="true" />
                 </div>
 
-
             </div>
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
-
 
         <!--==================================================the Order page==========================================-->
         <!--==================================================the shop page==========================================-->
-
         <div data-role="page" id="shop" data-theme="a">
-
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
@@ -414,9 +446,7 @@
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
-
             </div>
-
             <div data-role="content">
                 <div data-role="main" class="ui-content">
                     <h2>Product Catagories</h2>
@@ -452,27 +482,23 @@
                     </ul>
                 </div>
 
-
             </div>
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
-
         <!--==================================================the shop page==========================================-->
         <!--==================================================the yad2 page==========================================-->
         <div data-role="page" id="yad2" data-theme="a">
 
+            <a href="#yad2create">create product</a>
+        </div>
+        <!--==================================================yad2 create page=======================================-->
+        <div data-role="page" id="yad2create" data-theme="a">
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
-
             </div>
-
             <div data-role="content">
-
                 <div role="main" class="ui-content">
                     <h3>Add Your Product</h3>
                     <div class="ui-field-contain">
@@ -484,7 +510,6 @@
                             <option value="4">The 4th Option</option>
                         </select>
                     </div>
-
                     <label for="txt-last-name">Product Description</label>
                     <input type="text" name="txt-pdescription" id="txt-pdescription" value="">
                     <label for="txt-email">Product Price</label>
@@ -496,11 +521,11 @@
                         <img id="imgPH" src="Pics/addpic.png" height="150" width="150" />
                     </div>
                     <button id="btnCamera">Camera</button>
-                    <input type="file" name="image" accept="image/*" capture>
-
-
-
-                    <a href="#" data-rel="popup" data-transition="pop" data-position-to="window" id="btn_cam_test" class=" ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">CamSubmit</a>
+                    <i class="fa fa-camera-retro fa-2x myIcon" title="Edit"></i>  <!--comment to your right=> -->                     <!--all 4 comment are the part-->
+                    <input type="file" id="fileUpload" name="image" accept="image/*" capture>                                         <!--for the up load image -->
+                    <!--<a href="#" id="btn_cam_test class=" ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>-->           <!--in web server need to update-->
+                    <input id="btn" type="button" value="CamSubmit" />                                                                   <!--the folder to save image -->
+                    <
 
                     <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
                     <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
@@ -517,18 +542,14 @@
             </div>
 
 
-
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
+        <!--==================================================yad2 create page end=======================================-->
         <!--==================================================the yad2 page==========================================-->
         <!--==================================================the cart page==========================================-->
         <div data-role="page" id="cart" data-theme="a">
-
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
@@ -541,7 +562,6 @@
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
-
             </div>
             <div data-role="content">
                 <div role="main" class="ui-content">
@@ -579,24 +599,17 @@
                     <fieldset data-role="controlgroup">
                         <p class="mc-top-margin-1-5"><b>Total of 999$</b></p>
                         <a href="#pay" class="ui-btn ui-btn-b ui-corner-all">Pay</a>
-
                     </fieldset>
                 </div>
 
-
             </div>
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
-
         <!--==================================================the cart page==========================================-->
         <!--==================================================the products page==========================================-->
         <div data-role="page" id="products" data-theme="a">
-
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
@@ -609,11 +622,8 @@
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
-
             </div>
-
             <div data-role="content">
-
                 <div data-role="main" class="ui-content">
                     <h2>Products</h2>
                     <ul data-role="listview" data-inset="false">
@@ -648,19 +658,14 @@
                     </ul>
                 </div>
 
-
             </div>
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
         <!--==================================================the products page==========================================-->
         <!--==================================================the productDescription page==========================================-->
         <div data-role="page" id="ProductDiscription" data-theme="a">
-
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
@@ -673,35 +678,25 @@
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
-
             </div>
-
             <div data-role="content">
-
                 <div>
                     <h2 class="mc-text-center">This is Product Description</h2>
                     <img src="Pics/products/generic.jpg" style="width: 100%;" />
                     <h3 class="mc-text-center">bla bla bla</h3>
                 </div>
-
             </div>
             <button id="btnDialer">Dial Seller</button>
             <div id="telephone-list">
                 <a href="tel:0123456789">Call me</a>
             </div>
-
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
-
         <!--==================================================the productDescription page==========================================-->
         <!--==================================================the pay page==========================================-->
-
         <div data-role="page" id="pay" data-theme="a">
-
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
                 <div data-role="navbar" class="flow" data-position="fixed">
@@ -714,43 +709,30 @@
                         <li><a href="#login">SignOut</a></li>
                     </ul>
                 </div>
-
             </div>
-
             <div data-role="content">
-
                 <h4>User Information</h4>
-
                 <label for="txt-first-name">First Name</label>
                 <input type="text" name="txt-first-name" id="txt-first-name" value="">
                 <label for="txt-last-name">Last Name</label>
                 <input type="text" name="txt-last-name" id="txt-last-name" value="">
 
-
                 <h4>Credit Card Information</h4>
-
                 <label for="txt-email">Credit Card Number</label>
                 <input type="text" name="txt-credit" id="txt-credit" value="" placeholder="1234 5678 9012 3456">
                 <label for="txt-password">Expiration Date</label>
                 <input type="text" name="txt-date" id="txt-date" value="" placeholder="mm/yy">
-
 
                 <fieldset data-role="controlgroup">
                     <p class="mc-top-margin-1-5"><b>Total of 999$</b></p>
                     <a href="#pay" class="ui-btn ui-btn-b ui-corner-all">Pay</a>
                 </fieldset>
 
-
-
             </div>
             <div data-role="footer" data-position="fixed">
-
                 <h1>TM Yoni&Ohad</h1>
             </div>
-
         </div>
-
-
 
         <!--==================================================the pay page==========================================-->
     </form>
