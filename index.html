@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Index</title>
-  <!--  <meta charset="utf-8" />
+    <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-   
+
     <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
     <!--
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
@@ -26,30 +26,38 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    --><!--
-    <link href="jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
-    <script src="jquery/jquery-1.12.4.min.js"></script>
-    <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
-     
-    <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
- -->
+    -->
+    <!--
+       <link href="jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
+       <script src="jquery/jquery-1.12.4.min.js"></script>
+       <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
 
-    <link href="http://hayageek.github.io/jQuery-Upload-File/4.0.10/uploadfile.css" rel="stylesheet">
+       <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+       <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+       <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+       <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    -->
+
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="http://hayageek.github.io/jQuery-Upload-File/4.0.10/jquery.uploadfile.min.js"></script>
-     
+
+
 
     <link href="jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
     <script src="jquery/jquery-1.12.4.min.js"></script>
     <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
- 
+
+    <script type="text/javascript">
+        $(document.onload(function (event) {
+            if (typeof jQuery == 'undefined')
+                document.write(unescape("%3Cscript src='/path/jquery' type='text/javascript'%3E%3C/script%3E"));
+        }));
+    </script>
+
     <script type="text/javascript">
         //________________signup page________________//
-        $(document).on("pageinit", "#signup", function (event) {          
+        $(document).on("pageinit", "#signup", function (event) {
             debugger;
             wireEventsOrderPage();
         });
@@ -85,7 +93,7 @@
 
         //________________signup page end________________//
     </script>
-   <script>
+    <script>
         //________________yad2create page________________//
 
         function onSuccessCamera(imageURI) {
@@ -110,9 +118,9 @@
                     destinationType: Camera.DestinationType.FILE_URI
 
                 });
-                location.href = '#yad2';
+                location.href = '#yad2create';
             });
-            location.href = '#yad2';
+            location.href = '#yad2create';
         });
 
         function upload() {
@@ -171,12 +179,14 @@
 
     </script>
     <script>
+        /*
         //____________yad2______________//
         ;
         $(document).ready(function () {
             getdata();
-            
+
         });
+
         function getdata() {
             WebServiceURL = "WebService.asmx"
             $.ajax(
@@ -195,7 +205,7 @@
                         debugger;
                        // if (!listCreated) {
 
-                            for (var i = 0; i < UsersObj.length; i++) {
+                           for (var i = 0; i < UsersObj.length; i++) {
                                 resStr += UsersObj[i].Id + ", " + UsersObj[i].Name + "<br\>";
                                 $("#yad2").append("<ul id='list' data-role='listview' data-inset='true'></ul>");
                                 listCreated = true;
@@ -203,55 +213,263 @@
 
                                 $("#yad2").append("<li>  <div> <h2 class=" + "mc-text-center" + ">" + UsersObj[i].Id + "</h2> <img src=" + "Pics/shop.png" + " width=" + "42" + "height=" + "42" + " /> <h3 class=" + "mc-text-center" + ">" + UsersObj[i].Name + "</h3> </div> </li>");
                                 //$("#list").listview("refresh");
-                            }
+                          }
                       //  }
                         // $('#res').html(resStr);
                     }
                 })
         }
+        */
         //____________________yad2 end______________________//
 
     </script>
-
-    
     <script>
-    function onSuccessCamera(imageURI) {
-        //alert("Success");
-        var image = $('#imgPH');
-        image.attr('src', imageURI);
-        location.href = '#yad2';
-    }
+        //____________shop ______________//
+        ;
+        $(document).ready(function () {
+            getProducts();
 
-    function onFailCamera(message) {
-        //alert('Failed because: ' + message);
-        location.href = '#yad2';
-    }
+        });
+        function getProducts() {
+            WebServiceURL = "WebService.asmx"
+            $.ajax(
+                {
+                    url: WebServiceURL + "/GetTopics",
+                    dataType: "json",
+                    type: "POST", //use only POST!
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    error: function (jqXHR, exception) {
+                        alert(formatErrorMessage(jqXHR, exception));
+                    },
+                    success: function (data) {
+                        var TopicObj = JSON.parse(data.d); //or data["d"]
+                        var resStr = '';
+
+                        // if (!listCreated) {
+                        $("#TopicFill").empty();
+                        for (var i = 0; i < TopicObj.length; i++) {
+
+                            $("#TopicFill").append("<li><a href=" + "#" + " id=" + TopicObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + TopicObj[i].Category + "</h2></a></li>     ");
+                            //$("#TopicFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + UsersObj[i].Category + "</h2><p>" + UsersObj[i].Description + "</p></a></li>     ");
 
 
-    $(document).on("pagecreate", "#yad2", function () {
+                            //$("#list").listview("refresh");
+                        }
+                        //  }
+                        // $('#res').html(resStr);
+                    }
+                })
+        }
+        //____________________shop end______________________//
 
-        $('#btnCamera').tap(function () {
+    </script>
 
-            navigator.camera.getPicture(onSuccessCamera, onFailCamera, {
-                quality: 50,
-                destinationType: Camera.DestinationType.FILE_URI
+    <script>
+        function TopicClick(obj) {
+            //alert(obj.getAttribute("id"));
+            var cat = obj.getAttribute("id");
 
+
+            WebServiceURL = "WebService.asmx"
+            $.ajax(
+                {
+                    url: WebServiceURL + "/GetAllProducts",
+                    dataType: "json",
+                    type: "POST", //use only POST!
+                    data: JSON.stringify({ Cat: cat }),
+                    contentType: "application/json; charset=utf-8",
+                    error: function (jqXHR, exception) {
+                        alert(formatErrorMessage(jqXHR, exception));
+                    },
+                    success: function (data) {
+                        var ProductsObj = JSON.parse(data.d); //or data["d"]
+                        var resStr = '';
+
+                        // if (!listCreated) {
+                        $("#ProductFill").empty(); //clear the ProductFill Previous "append"
+                        $("#ProductFill").append("<h2> " + ProductsObj[0].Category + " Category </h2>");
+                        for (var i = 0; i < ProductsObj.length; i++) {
+                            //$("#ProductFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/products/cola.jpg" + " /><h2>" + UsersObj[i].Description + "</h2></a></li>     ");
+                            $("#ProductFill").append("<li><a href=" + "#products" + " id=" + ProductsObj[i].Name + " onclick=AddToCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");
+
+                            //$("#list").listview("refresh");
+                        }
+                        location.href = '#products';
+
+
+
+
+                        //  }
+                        // $('#res').html(resStr);
+                    }
+
+                })
+            return false;
+        }
+    </script>
+
+    <script>
+        function AddToCart(obj) {
+
+            alert("Added To Cart");
+
+            var add = obj.getAttribute("id");
+
+            WebServiceURL = "WebService.asmx"
+            $.ajax(
+                {
+                    url: WebServiceURL + "/AddToCart",
+                    dataType: "json",
+                    type: "POST", //use only POST!
+                    data: JSON.stringify({ Add: add }),
+                    contentType: "application/json; charset=utf-8",
+                    error: function (jqXHR, exception) {
+                        alert(formatErrorMessage(jqXHR, exception));
+                    },
+                    success: function (data) {
+                        var ProductsObj = JSON.parse(data.d); //or data["d"]
+                        var resStr = '';
+                    }
+                })
+            return false;
+
+
+        }
+
+    </script>
+
+
+    <script>
+        function onSuccessCamera(imageURI) {
+            //alert("Success");
+            var image = $('#imgPH');
+            image.attr('src', imageURI);
+            location.href = '#yad2';
+        }
+
+        function onFailCamera(message) {
+            //alert('Failed because: ' + message);
+            location.href = '#yad2';
+        }
+
+
+        $(document).on("pagecreate", "#yad2", function () {
+
+            $('#btnCamera').tap(function () {
+
+                navigator.camera.getPicture(onSuccessCamera, onFailCamera, {
+                    quality: 50,
+                    destinationType: Camera.DestinationType.FILE_URI
+
+                });
+                location.href = '#yad2';
             });
             location.href = '#yad2';
         });
-        location.href = '#yad2';
-    });
+
+    </script>
+
+    <script>
+        $(document).on("pagecreate", "#cart", function () {
+            //alert("CartCreate");
+
+            //alert(obj.getAttribute("id"));
+
+            WebServiceURL = "WebService.asmx"
+            $.ajax(
+                {
+                    url: WebServiceURL + "/GetCart",
+                    dataType: "json",
+                    type: "POST", //use only POST!
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    error: function (jqXHR, exception) {
+                        alert(formatErrorMessage(jqXHR, exception));
+                    },
+                    success: function (data) {
+                        var ProductsObj = JSON.parse(data.d); //or data["d"]
+                        var resStr = '';
+                        var sum = 0;;
+                        // if (!listCreated) {
+                        $("#CartFill").empty(); //clear the ProductFill Previous "append"
+                        $("#CartFill").append("<h2> Products For Purchase </h2>");
+                        for (var i = 0; i < ProductsObj.length; i++) {
+                            //$("#ProductFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/products/cola.jpg" + " /><h2>" + UsersObj[i].Description + "</h2></a></li>     ");
+                            $("#CartFill").append("<li><a href=" + "#" + " id=" + ProductsObj[i].Name + " onclick=RemoveFromCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");
+                            sum += ProductsObj[i].Price;
+                            //$("#list").listview("refresh");
+                        }
+                        $("#CartSum").append("Total Of: $"+sum);
+                      
+                        location.href = '#cart';
+
+
+
+
+                        //  }
+                        // $('#res').html(resStr);
+                    }
+
+                })
+            return false;
+
+
+        });
+
+    </script>
+
+    <script>
+        function ClearCart() {
+            WebServiceURL = "WebService.asmx"
+            $.ajax(
+                {
+                    url: WebServiceURL + "/ClearCart",
+                    dataType: "json",
+                    type: "POST", //use only POST!
+                    data: {},
+                    contentType: "application/json; charset=utf-8",
+                    error: function (jqXHR, exception) {
+                        alert(formatErrorMessage(jqXHR, exception));
+                    },
+                    success: function (data) {
+                        var ProductsObj = JSON.parse(data.d); //or data["d"]
+                        var resStr = '';
+                        var sum = 0;;
+                        // if (!listCreated) {
+                        $("#CartFill").empty(); //clear the ProductFill Previous "append"
+                        $("#CartFill").append("<h2> Products For Purchase </h2>");
+                        for (var i = 0; i < ProductsObj.length; i++) {
+                            //$("#ProductFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/products/cola.jpg" + " /><h2>" + UsersObj[i].Description + "</h2></a></li>     ");
+                            $("#CartFill").append("<li><a href=" + "#" + " id=" + ProductsObj[i].Name + " onclick=RemoveFromCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");
+                            sum += ProductsObj[i].Price;
+                            //$("#list").listview("refresh");
+                        }
+                        $("#CartSum").append("Total Of: $" + sum);
+
+                        location.href = '#cart';
+
+
+
+
+                        //  }
+                        // $('#res').html(resStr);
+                    }
+
+                })
+
+        }
 
     </script>
 
 
 
 
-         
+
 </head>
 <body>
 
-    <form id="indexform">
+    <form method="get" id="indexform">
         <!--==================================================the login page==========================================-->
         <div data-role="page" id="login" data-theme="a">
             <div data-role="header" data-position="fixed">
@@ -271,7 +489,6 @@
             <div style="text-align : center;">
                 <img src="Pics/shop_grey.jpg" />
             </div>
-
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
             </div>
@@ -315,55 +532,7 @@
         </div>
         <!--==================================================the signin page==========================================-->
         <!--==================================================the signup page==========================================-->
-        <!--
 
-                <div data-role="page" id="signup" data-theme="a">
-
-                    <div data-role="header" data-position="fixed">
-                        <h1>Top Shop</h1>
-
-                    </div>
-
-                    <div data-role="content">
-
-                        <div role="main" class="ui-content">
-                            <h3>Sign Up</h3>
-                            <label for="txt-first-name">First Name</label>
-                            <input type="text" name="txt-first-name" id="txt-first-name" value="">
-                            <label for="txt-last-name">Last Name</label>
-                            <input type="text" name="txt-last-name" id="txt-last-name" value="">
-                            <label for="txt-email">Email Address</label>
-                            <input type="text" name="txt-email" id="txt-email" value="">
-                            <label for="txt-password">Password</label>
-                            <input type="password" name="txt-password" id="txt-password" value="">
-                            <label for="txt-password-confirm">Confirm Password</label>
-                            <input type="password" name="txt-password-confirm" id="txt-password-confirm" value="">
-                            <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
-                            <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
-                                <div data-role="header">
-                                    <h1>Almost done...</h1>
-                                </div>
-                                <div role="main" class="ui-content">
-                                    <h3>Confirm Your Email Address</h3>
-                                    <p>We sent you an email with instructions on how to confirm your email address. Please check your inbox and follow the instructions in the email.</p>
-                                    <div class="mc-text-center"><a href="sign-in.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
-                    <div data-role="footer" data-position="fixed">
-
-                        <h1>TM Yoni&Ohad</h1>
-                    </div>
-
-
-                </div>
-        -->
         <div data-role="page" id="signup" data-theme="a">
             <div data-role="header" data-position="fixed">
 
@@ -420,6 +589,7 @@
 
         <!--==================================================the Order page==========================================-->
         <!--==================================================the shop page==========================================-->
+
         <div data-role="page" id="shop" data-theme="a">
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
@@ -437,11 +607,12 @@
             <div data-role="content">
                 <div data-role="main" class="ui-content">
                     <h2>Product Catagories</h2>
-                    <ul data-role="listview" data-inset="false">
-                        <li>
+                    <ul data-role="listview" data-inset="false" id="TopicFill">
+
+                        <!--<li>
                             <a href="#products">
                                 <img src="Pics/catagories/Clean.jpg" />
-                                <h2>Topic 1</h2>
+                                <h2 id="yoyo"></h2>
                                 <p>This is Topic 1 Description</p>
                             </a>
                         </li>
@@ -465,7 +636,8 @@
                                 <h2>Topic 2</h2>
                                 <p>This is Topic 2 Description</p>
                             </a>
-                        </li>
+                        </li>-->
+
                     </ul>
                 </div>
 
@@ -474,11 +646,25 @@
                 <h1>TM Yoni&Ohad</h1>
             </div>
         </div>
+
         <!--==================================================the shop page==========================================-->
         <!--==================================================the yad2 page==========================================-->
         <div data-role="page" id="yad2" data-theme="a">
+            <div data-role="header" data-position="fixed">
+                <h1>Top Shop</h1>
+            </div>
 
-            <a href="#yad2create">create product</a>
+            <div data-role="content">
+                <a data-role="content" href="#yad2create" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">Add your product</a>
+                <div data-role="footer" data-position="fixed">
+
+                </div>
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+                <h1>TM Yoni&Ohad</h1>
+            </div>
         </div>
         <!--==================================================yad2 create page=======================================-->
         <div data-role="page" id="yad2create" data-theme="a">
@@ -504,18 +690,18 @@
                     <label for="txt-email">Phone Number</label>
                     <input type="text" name="txt-price" id="txt-price" value="">
                     <label for="txt-password">Add Photo</label>
-                    
+
                     <div style="text-align : center;">
                         <img id="imgPH" src="Pics/addpic.png" height="150" width="150" />
                     </div>
                     <button id="btnCamera">Camera</button>
-                    
-                    
+
+
                     <i class="fa fa-camera-retro fa-2x myIcon" title="Edit"></i>  <!--comment to your right=> -->                     <!--all 4 comment are the part-->
                     <input type="file" id="fileUpload" name="image" accept="image/*" capture>                                         <!--for the up load image -->
-                  
+                    <!--<a href="#" id="btn_cam_test class=" ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>-->           <!--in web server need to update-->
                     <input id="btn" type="button" value="CamSubmit" />                                                                   <!--the folder to save image -->
-                    
+
 
                     <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
                     <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
@@ -555,41 +741,45 @@
             </div>
             <div data-role="content">
                 <div role="main" class="ui-content">
-                    <h3>Selected Products</h3>
-                    <ul data-role="listview" data-inset="false" data-icon="delete">
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/beer-generic.jpg" />
-                                <h2>Product 1</h2>
-                                <p>This is Product 1 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/cola.jpg" />
-                                <h2>Product 2</h2>
-                                <p>This is Product 2 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/water.jpg" />
-                                <h2>Product 3</h2>
-                                <p>This is Product 3 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/wine.jpg" />
-                                <h2>Product 4</h2>
-                                <p>This is Product 4 Description</p>
-                            </a>
-                        </li>
+                   
+                    <ul data-role="listview" data-inset="false" id="CartFill" data-icon="delete">
+
+                        <!-- <li>
+             <a href="#ProductDiscription" id="hello">
+                 <img src="Pics/products/beer-generic.jpg" />
+                 <h2>Product 1</h2>
+                 <p>This is Product 1 Description</p>
+             </a>
+         </li>
+         <li>
+             <a href="#ProductDiscription">
+                 <img src="Pics/products/cola.jpg" />
+                 <h2>Product 2</h2>
+                 <p>This is Product 2 Description</p>
+             </a>
+         </li>
+         <li>
+             <a href="#ProductDiscription">
+                 <img src="Pics/products/water.jpg" />
+                 <h2>Product 3</h2>
+                 <p>This is Product 3 Description</p>
+             </a>
+         </li>
+         <li>
+             <a href="#ProductDiscription">
+                 <img src="Pics/products/wine.jpg" />
+                 <h2>Product 4</h2>
+                 <p>This is Product 4 Description</p>
+             </a>
+         </li>
+            -->
                     </ul>
-                    <fieldset data-role="controlgroup">
-                        <p class="mc-top-margin-1-5"><b>Total of 999$</b></p>
+
+                   
+                        <p class="mc-top-margin-1-5" id="CartSum"><b></b></p>
+                    <a href="#pay" class="ui-btn ui-btn-b ui-corner-all" id="ClearCart" onclick="ClearCart()">Clear Cart</a>
                         <a href="#pay" class="ui-btn ui-btn-b ui-corner-all">Pay</a>
-                    </fieldset>
+                
                 </div>
 
             </div>
@@ -615,36 +805,37 @@
             </div>
             <div data-role="content">
                 <div data-role="main" class="ui-content">
-                    <h2>Products</h2>
-                    <ul data-role="listview" data-inset="false">
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/beer-generic.jpg" />
-                                <h2>Product 1</h2>
-                                <p>This is Product 1 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/cola.jpg" />
-                                <h2>Product 2</h2>
-                                <p>This is Product 2 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/water.jpg" />
-                                <h2>Product 3</h2>
-                                <p>This is Product 3 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#ProductDiscription">
-                                <img src="Pics/products/wine.jpg" />
-                                <h2>Product 4</h2>
-                                <p>This is Product 4 Description</p>
-                            </a>
-                        </li>
+                    <h2 id="ProductsHead"></h2>
+                    <ul data-role="listview" data-inset="false" id="ProductFill" data-icon="plus">
+                        <!--      <li>
+                                   <a href="#ProductDiscription">
+                                       <img src="Pics/products/beer-generic.jpg" />
+                                       <h2>Product 1</h2>
+                                       <p>This is Product 1 Description</p>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#ProductDiscription">
+                                       <img src="Pics/products/cola.jpg" />
+                                       <h2>Product 2</h2>
+                                       <p>This is Product 2 Description</p>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#ProductDiscription">
+                                       <img src="Pics/products/water.jpg" />
+                                       <h2>Product 3</h2>
+                                       <p>This is Product 3 Description</p>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#ProductDiscription">
+                                       <img src="Pics/products/wine.jpg" />
+                                       <h2>Product 4</h2>
+                                       <p>This is Product 4 Description</p>
+                                   </a>
+                               </li>
+                            -->
                     </ul>
                 </div>
 
