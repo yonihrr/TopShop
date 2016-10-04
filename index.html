@@ -14,7 +14,7 @@
     <!-- Good default declaration:
     * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
     * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+    * Disables use of eval() and inline scripts in Order to mitigate risk of XSS vulnerabilities. To change this:
         * Enable inline JS: add 'unsafe-inline' to default-src
         * Enable eval(): add 'unsafe-eval' to default-src
     * Create your own at http://cspisawesome.com
@@ -46,6 +46,8 @@
     <link href="jquery/jquery.mobile-1.4.5.min.css" rel="stylesheet" />
     <script src="jquery/jquery-1.12.4.min.js"></script>
     <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+
+
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 
     <script type="text/javascript">
@@ -55,26 +57,29 @@
         }));
     </script>
 
+
+
     <script type="text/javascript">
+        var UserLoginObj = [{ Id: -1, Name: -1, PhoneNumber: -1, UserName: -1, Password: -1, Email: -1 }];
+        var sum = 0;
         //________________signup page________________//
         $(document).on("pageinit", "#signup", function (event) {
-            debugger;
             wireEventsOrderPage();
         });
         function wireEventsOrderPage() {
-
-
             $('#btnsubmit').on('tap', function () {
                 debugger;
-                var FirstName = $('#txt-first-name').val();
-                var LastName = $('#txt-last-name').val();
-                var Email = $('#txt-email').val();
-                var Password = $('#txt-password-confirm').val();
-                var J = { FirstName: FirstName, LastName: LastName, Email: Email, Password: Password };
-                WebServiceURL = "WebService.asmx";
+                var Name = $('#txt-name').val();
+                var UserName = $('#txt-userName').val();
+                var Email = $('#txt-Uemail').val();
+                var PhoneNumber = $('#txt-phoneNumber').val();
+                var Password = $('#txt-Upassword').val();
+                var J = { PhoneNumber: PhoneNumber, Name: Name, UserName: UserName, Password: Password, Email: Email };
+                // WebServiceURL = "WebService.asmx";
+                WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/SignUser");
                 $.support.cors = true;
                 $.ajax({
-                    url: WebServiceURL + "/SignUser",
+                    url: WebServiceURL,
                     dataType: "json",
                     type: "POST",
                     data: JSON.stringify(J),
@@ -90,27 +95,67 @@
                 });
             });
         }
-
         //________________signup page end________________//
     </script>
     <script>
+        //________________signin page start________________//
+        $(document).on("pageinit", "#signin", function (event) {
+            verification();
+        });
+        function verification() {
+            $('#btnsubmit').on('tap', function () {
+
+                var UserNameV = $('#txt-userNameV').val();
+                var PasswordV = $('#txt-passwordV').val();
+                var J = { UserName: UserNameV, Password: PasswordV };
+                //WebServiceURL = "WebService.asmx";
+                WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/VerifyUser");
+                $.support.cors = true;
+                $.ajax({
+                    url: WebServiceURL,
+                    dataType: "json",
+                    type: "POST",
+                    data: JSON.stringify(J),
+                    contentType: "application/json; charset=utf-8",
+                    error: function (err) {
+                        alert("errornir: " + JSON.stringify(err));
+                    },
+                    success: function (data) {
+
+                        UserLoginObj = JSON.parse(data.d);
+                        if (UserLoginObj[0].Id != -1) {
+                            alert("hello " + UserLoginObj[0].Name);
+                            for (var i = 1; i <= 11; i++)
+                                $("#user" + i + "").append("<b>" + UserLoginObj[0].UserName + "</b>");
+                            $('#carthegeust').empty();
+                            $('#carthegeust').append("</div><a href=\"#\" class=\"ui-btn ui-btn-b ui-corner-all\" id=\"ClearCart\" onclick=\"ClearCart()\">Clear Cart</a><a href=\"#\" class=\"ui-btn ui-btn-b ui-corner-all\" onclick=\"OrderBy()\">Pay</a>");
+                            $('#notgeust').append(" <a data-role=\"content\" href=\"#yad2create\" class=\"ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5\">Add your product</a>");
+
+                            location.href = '#home';
+
+                        }
+                        else {
+                            alert("not registered ,sorry ");
+                        }
+
+                    }
+                });
+            });
+        }
+
+
+
+
+
+        //______________signin page end________________//
+    </script>
+
+
+    <script>
         //________________yad2create page________________//
-
-        function onSuccessCamera(imageURI) {
-            //alert("Success");
-            var image = $('#imgPH');
-            image.attr('src', imageURI);
-            location.href = '#yad2';
-        }
-
-        function onFailCamera(message) {
-            //alert('Failed because: ' + message);
-            location.href = '#yad2';
-        }
-
-
         $(document).on("pagecreate", "#yad2create", function () {
-            $('#btn').click(upload);
+
+            uploadProduct();
             $('#btnCamera').tap(function () {
 
                 navigator.camera.getPicture(onSuccessCamera, onFailCamera, {
@@ -123,121 +168,110 @@
             location.href = '#yad2create';
         });
 
-        function upload() {
-            var data = new FormData(),
-            file = $("#fileUpload")[0].files[0];
 
-            //data.append("name", file.name);
-            //data.append("size", file.size);
-            //data.append("type", file.type);
-            data.append("file", file);
-            //data.append("UploadedFile", path);
+        var filename;
+        function onFailCamera(message) { alert('Failed because: ' + message); }
+        function onSuccessCamera(imageURI) {
+            uploadPhoto(imageURI);
 
-            //Make Ajax request with the contentType = false, and procesDate = false
-            $.ajax({
-                type: 'POST',
-                url: 'WebService.asmx/UploadFile',
-                data: data,
-                async: false,
-                success: function (data) {
-                    alert(data)
-                },
-                cache: false,
-                contentType: false,
-                processData: false
+
+        }
+        var pici
+        function uploadPhoto(imageURI) {
+            var options = new FileUploadOptions(); // PhoneGap object to allow server upload
+            options.fileKey = "file";
+            filename = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+            options.fileName = filename;
+            options.mimeType = "image/jpeg"; // file type
+            var params = {}; // Optional parameters
+            params.value1 = "test";
+            params.value2 = "param";
+            options.params = params; // add parameters to the FileUploadOptions object
+            var ft = new FileTransfer();
+            ft.upload(imageURI, encodeURI("http://proj.ruppin.ac.il/cegroup10/image/ReturnValue.ashx"), win, fail, options); // Upload
+            //ft.upload(imageURI, encodeURI("http://10.0.0.1:3000//ReturnValue.ashx"), win, fail, options); // Upload
+            debugger;
+            pici = filename;
+        }
+        function win(r) {        
+            var image = $('#imgPH');
+            var hyper = "http://proj.ruppin.ac.il/cegroup10/image/"+pici+".jpg";
+            image.attr('src', hyper);
+
+            alert("sucserrs" + error.code);
+
+
+        }
+        function fail(error) {
+            alert("An error has occurred: Code = " + error.code);
+        }
+        function uploadProduct() {
+            $('#btn').on('tap', function () {
+                debugger;
+                // WebServiceURL = "WebService.asmx";
+                WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/Yad2Upload");
+                var Category = $('#txt-Category').val();
+                var Description = $('#txt-Description').val();
+                var Price = $('#txt-Price').val();
+                var PhoneNumber = $('#txt-Phone-Number').val();
+                var Name = $('#txt-Product-Name').val();
+                var photo = pici;
+
+                var J = { id: PhoneNumber, Category: Category,Name: Name, Description: Description, Price: Price, ImagePath: photo };
+
+                $.ajax({
+                    url: WebServiceURL,
+                    dataType: "json",
+                    type: "POST",
+                    data: JSON.stringify(J),
+                    contentType: "application/json; charset=utf-8",
+                    error: function (err) {
+                        alert("errornir: " + JSON.stringify(err));
+                    },
+                    success: function (data) {
+                        if (data["d"] == 1) {
+                            alert('SUCCESS: ' + data["d"] + ' rows');
+
+                        }
+                        getProducts(2);
+                        location.href = '#yad2';
+                        
+                    }
+                });
+                
             });
-
         }
         //________________yad2create page end________________//
     </script>
 
-    <script>
-
-        function onSuccessDialer(result) {
-            alert("Dialer Success");
-            console.log("Success:" + result);
-            location.href = '#ProductDiscription';
-        }
-
-        function onErrorDialer(result) {
-            console.log("Error:" + result);
-            location.href = '#ProductDiscription';
-        }
 
 
-        $(document).on("pagecreate", "#ProductDiscription", function () {
 
-            $('#btnDialer').tap(function () {
-                alert("in Dialer btn");
-                var number = "1234567890";
-                bypassAppChooser = true;
-                window.plugins.CallNumber.callNumber(onSuccessDialer, onErrorDialer, number, bypassAppChooser);
-                location.href = '#ProductDiscription';
-            });
-            location.href = '#ProductDiscription';
-        });
 
-    </script>
-    <script>
-        /*
-        //____________yad2______________//
-        ;
-        $(document).ready(function () {
-            getdata();
 
-        });
 
-        function getdata() {
-            WebServiceURL = "WebService.asmx"
-            $.ajax(
-                {
-                    url: WebServiceURL + "/GetAllUsers",
-                    dataType: "json",
-                    type: "POST", //use only POST!
-                    data: {},
-                    contentType: "application/json; charset=utf-8",
-                    error: function (jqXHR, exception) {
-                        alert(formatErrorMessage(jqXHR, exception));
-                    },
-                    success: function (data) {
-                        var UsersObj = JSON.parse(data.d); //or data["d"]
-                        var resStr = '';
-                        debugger;
-                       // if (!listCreated) {
 
-                           for (var i = 0; i < UsersObj.length; i++) {
-                                resStr += UsersObj[i].Id + ", " + UsersObj[i].Name + "<br\>";
-                                $("#yad2").append("<ul id='list' data-role='listview' data-inset='true'></ul>");
-                                listCreated = true;
-                                $("#yad2").trigger("create");
-
-                                $("#yad2").append("<li>  <div> <h2 class=" + "mc-text-center" + ">" + UsersObj[i].Id + "</h2> <img src=" + "Pics/shop.png" + " width=" + "42" + "height=" + "42" + " /> <h3 class=" + "mc-text-center" + ">" + UsersObj[i].Name + "</h3> </div> </li>");
-                                //$("#list").listview("refresh");
-                          }
-                      //  }
-                        // $('#res').html(resStr);
-                    }
-                })
-        }
-        */
-        //____________________yad2 end______________________//
-
-    </script>
     <script>
         //____________shop ______________//
-        ;
-        $(document).ready(function () {
-            getProducts();
+        $(document).on("pagecreate", "#shop", function (event) {
+            getProducts(1);
 
         });
-        function getProducts() {
-            WebServiceURL = "WebService.asmx"
+        $(document).on("pageinit", "#yad2", function (event) {
+            getProducts(2);
+
+        });
+        function getProducts(yad) {
+            //WebServiceURL = "WebService.asmx";
+            WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/GetTopics");
+            var j = { Yad: yad };
+
             $.ajax(
                 {
-                    url: WebServiceURL + "/GetTopics",
+                    url: WebServiceURL,
                     dataType: "json",
                     type: "POST", //use only POST!
-                    data: {},
+                    data: JSON.stringify(j),
                     contentType: "application/json; charset=utf-8",
                     error: function (jqXHR, exception) {
                         alert(formatErrorMessage(jqXHR, exception));
@@ -247,17 +281,16 @@
                         var resStr = '';
 
                         // if (!listCreated) {
-                        $("#TopicFill").empty();
+                        
+                        $("#TopicFill" + yad + "").empty();
                         for (var i = 0; i < TopicObj.length; i++) {
 
-                            $("#TopicFill").append("<li><a href=" + "#" + " id=" + TopicObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + TopicObj[i].Category + "</h2></a></li>     ");
-                            //$("#TopicFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + UsersObj[i].Category + "</h2><p>" + UsersObj[i].Description + "</p></a></li>     ");
 
+                            var pic = encodeURI("http://proj.ruppin.ac.il/cegroup10/image/" + TopicObj[i].Category +".jpg");
+                            $("#TopicFill" + yad + "").append("<li><a href=" + "#" + " id=" + TopicObj[i].Category + " onclick=\"TopicClick(this," + yad + ")\"" + ">" + "<img src=\""+pic+"\" style=\"width: 30%\" />" + "<h2>" + TopicObj[i].Category + "</h2></a></li>     ");
 
-                            //$("#list").listview("refresh");
                         }
-                        //  }
-                        // $('#res').html(resStr);
+
                     }
                 })
         }
@@ -266,18 +299,20 @@
     </script>
 
     <script>
-        function TopicClick(obj) {
+        function TopicClick(obj, yad) {
             //alert(obj.getAttribute("id"));
-            var cat = obj.getAttribute("id");
+            var cat = $(obj).attr('id');
 
-
-            WebServiceURL = "WebService.asmx"
+            var j = { Cat: cat, Yad: yad };
+            //WebServiceURL = "WebService.asmx";
+            WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/GetAllProducts");
             $.ajax(
                 {
-                    url: WebServiceURL + "/GetAllProducts",
+
+                    url: WebServiceURL,
                     dataType: "json",
                     type: "POST", //use only POST!
-                    data: JSON.stringify({ Cat: cat }),
+                    data: JSON.stringify(j),
                     contentType: "application/json; charset=utf-8",
                     error: function (jqXHR, exception) {
                         alert(formatErrorMessage(jqXHR, exception));
@@ -285,16 +320,24 @@
                     success: function (data) {
                         var ProductsObj = JSON.parse(data.d); //or data["d"]
                         var resStr = '';
-
+                        var str = "";
                         // if (!listCreated) {
-                        $("#ProductFill").empty(); //clear the ProductFill Previous "append"
-                        $("#ProductFill").append("<h2> " + ProductsObj[0].Category + " Category </h2>");
+                        // $("#ProductFill").empty(); //clear the ProductFill Previous "append"
+                        //$("#ProductFill").append("<h2> " + ProductsObj[0].Category + " Category </h2>");
+                        $("#ProductFill").empty();
                         for (var i = 0; i < ProductsObj.length; i++) {
-                            //$("#ProductFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/products/cola.jpg" + " /><h2>" + UsersObj[i].Description + "</h2></a></li>     ");
-                            $("#ProductFill").append("<li><a href=" + "#products" + " id=" + ProductsObj[i].Name + " onclick=AddToCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");
-
-                            //$("#list").listview("refresh");
+                            if (ProductsObj[i].Category == cat) {
+                                $("#ProductFill").empty(); //clear the ProductFill Previous "append"
+                                $("#ProductFill").append("<h2> " + ProductsObj[i].Category + " Category </h2>");
+                            }
                         }
+                        for (var i = 0; i < ProductsObj.length; i++) {
+                            if (yad == 2)
+                                $("#ProductFill").append("<li><a href=" + "#products" + " id=" + "\"" + ProductsObj[i].Id + "\"" + " onclick=\"AddToCart(this," + yad + "," + UserLoginObj[0].Id + ")\"" + "><img src=" + "\"http://proj.ruppin.ac.il/cegroup10/image/" + ProductsObj[i].ImagePath + ".jpg\"  style=\"width: 30%\"/><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");                            //str += "<li><a href=" + "#products" + " id=" + ProductsObj[i].Name + " onclick=AddToCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ";
+                            if (yad == 1)
+                                $("#ProductFill").append("<li><a href=" + "#products" + " id=" + "\"" + ProductsObj[i].Id + "\"" + " onclick=\"AddToCart(this," + yad + "," + UserLoginObj[0].Id + ")\"" + "><img src=" + "\"http://proj.ruppin.ac.il/cegroup10/image/" + ProductsObj[i].ImagePath + "\"  style=\"width: 30%\"/><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");                            //str += "<li><a href=" + "#products" + " id=" + ProductsObj[i].Name + " onclick=AddToCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ";
+                        }
+
                         location.href = '#products';
 
 
@@ -308,152 +351,163 @@
             return false;
         }
     </script>
-
     <script>
-        function AddToCart(obj) {
+        //_________________pay page___________________//
 
-            alert("Added To Cart");
 
-            var add = obj.getAttribute("id");
+        function PayToOrder() {
 
-            WebServiceURL = "WebService.asmx"
+
+            var Credit = $('#txt-credit').val();
+            var ExDate = $('#txt-date').val();
+
+            WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/MakeOrder");
+            // WebServiceURL = "WebService.asmx";
             $.ajax(
-                {
-                    url: WebServiceURL + "/AddToCart",
-                    dataType: "json",
-                    type: "POST", //use only POST!
-                    data: JSON.stringify({ Add: add }),
-                    contentType: "application/json; charset=utf-8",
-                    error: function (jqXHR, exception) {
-                        alert(formatErrorMessage(jqXHR, exception));
-                    },
-                    success: function (data) {
-                        var ProductsObj = JSON.parse(data.d); //or data["d"]
-                        var resStr = '';
-                    }
-                })
-            return false;
-
-
-        }
-
-    </script>
-
-
-    <script>
-        function onSuccessCamera(imageURI) {
-            //alert("Success");
-            var image = $('#imgPH');
-            image.attr('src', imageURI);
-            location.href = '#yad2';
-        }
-
-        function onFailCamera(message) {
-            //alert('Failed because: ' + message);
-            location.href = '#yad2';
+               {
+                   url: WebServiceURL,
+                   dataType: "json",
+                   type: "POST", //use only POST!
+                   data: JSON.stringify({ UserId: UserLoginObj[0].Id, CreditNumber: Credit, ExpireDate: ExDate }),
+                   contentType: "application/json; charset=utf-8",
+                   error: function (jqXHR, exception) {
+                       alert(formatErrorMessage(jqXHR, exception));
+                   },
+                   success: function (data) {
+                       var ProductsObj = JSON.parse(data.d); //or data["d"]
+                       var resStr = '';
+                       alert(UserLoginObj[0].Name + " You made an Order ");
+                   }
+               })
+            location.href = "#Orders";
         }
 
 
-        $(document).on("pagecreate", "#yad2", function () {
-
-            $('#btnCamera').tap(function () {
-
-                navigator.camera.getPicture(onSuccessCamera, onFailCamera, {
-                    quality: 50,
-                    destinationType: Camera.DestinationType.FILE_URI
-
-                });
-                location.href = '#yad2';
-            });
-            location.href = '#yad2';
-        });
 
     </script>
 
     <script>
-        $(document).on("pagecreate", "#cart", function () {
-            //alert("CartCreate");
+        function AddToCart(obj, yad, userid) {
 
-            //alert(obj.getAttribute("id"));
+            if (UserLoginObj[0].Id != -1) {
+                debugger;
+                var add = $(obj).attr('id');
 
-            WebServiceURL = "WebService.asmx"
-            $.ajax(
-                {
-                    url: WebServiceURL + "/GetCart",
-                    dataType: "json",
-                    type: "POST", //use only POST!
-                    data: {},
-                    contentType: "application/json; charset=utf-8",
-                    error: function (jqXHR, exception) {
-                        alert(formatErrorMessage(jqXHR, exception));
-                    },
-                    success: function (data) {
-                        var ProductsObj = JSON.parse(data.d); //or data["d"]
-                        var resStr = '';
-                        var sum = 0;;
-                        // if (!listCreated) {
-                        $("#CartFill").empty(); //clear the ProductFill Previous "append"
-                        $("#CartFill").append("<h2> Products For Purchase </h2>");
-                        for (var i = 0; i < ProductsObj.length; i++) {
-                            //$("#ProductFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/products/cola.jpg" + " /><h2>" + UsersObj[i].Description + "</h2></a></li>     ");
-                            $("#CartFill").append("<li><a href=" + "#" + " id=" + ProductsObj[i].Name + " onclick=RemoveFromCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");
-                            sum += ProductsObj[i].Price;
-                            //$("#list").listview("refresh");
+                WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/AddToCart");
+                //WebServiceURL = "WebService.asmx";
+                $.ajax(
+                    {
+                        url: WebServiceURL,
+                        dataType: "json",
+                        type: "POST", //use only POST!
+                        data: JSON.stringify({ Add: add, Yad: yad, UserId: userid }),
+                        contentType: "application/json; charset=utf-8",
+                        error: function (jqXHR, exception) {
+                            alert(formatErrorMessage(jqXHR, exception));
+                        },
+                        success: function (data) {
+                            var ProductsObj = JSON.parse(data.d); //or data["d"]
+                            var resStr = '';
+                            alert("Added To Cart");
                         }
-                        $("#CartSum").append("Total Of: $"+sum);
-                      
-                        location.href = '#cart';
-
-
-
-
-                        //  }
-                        // $('#res').html(resStr);
-                    }
-
-                })
+                    })
+            }
+            else
+                alert("hello, please signup to purches");
             return false;
 
 
+        }
+
+    </script>
+
+
+
+    <script>
+        $(document).on("pageinit", "#cart", function () {
+
+            LoadTable("Cart");
         });
+
+        $(document).on("pageinit", "#Orders", function () {
+
+            LoadTable("Orders");
+        });
+        function LoadTable(Filler) {
+            if (UserLoginObj[0].Id != -1) {
+
+
+                // WebServiceURL = "WebService.asmx"
+                WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/GetTable");
+
+                $.ajax(
+                    {
+                        url: WebServiceURL,
+                        dataType: "json",
+                        type: "POST", //use only POST!
+                        data: JSON.stringify({ UserId: UserLoginObj[0].Id, TableName: Filler }),
+                        contentType: "application/json; charset=utf-8",
+                        error: function (jqXHR, exception) {
+                            alert(formatErrorMessage(jqXHR, exception));
+                        },
+                        success: function (data) {
+                            var ProductsObj = JSON.parse(data.d); //or data["d"]
+                            var resStr = '';
+                            var sum = 0;
+
+                            $("#" + Filler + "Sum").empty();
+                            $("#" + Filler + "Fill").empty(); //clear the ProductFill Previous "append"
+                            $("#" + Filler + "Fill").append("<h2> Products For Purchase </h2>");
+                            for (var i = 0; i < ProductsObj.length; i++) {
+
+                                //$("#ProductFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/products/cola.jpg" + " /><h2>" + UsersObj[i].Description + "</h2></a></li>     ");
+                                $("#" + Filler + "Fill").append("<li><a href=" + "#" + " id=" + ProductsObj[i].id + " onclick=RemoveFromCart(this)" + "><img src=" + "http://proj.ruppin.ac.il/cegroup10/image/" + ProductsObj[i].ImagePath + " style=\"width: 30%\" /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");
+                                sum += ProductsObj[i].Price;
+
+
+                            }
+                            $("#" + Filler + "Sum").append("Total Of: $" + sum);
+
+                        }
+
+                    })
+                return false;
+            }
+            else {
+                alert("hello, you will need to signin in order to purches");
+                return false;
+            }
+        }
+
+
+    </script>
+
+    <script>
+
+
 
     </script>
 
     <script>
         function ClearCart() {
-            WebServiceURL = "WebService.asmx"
+            //WebServiceURL = "WebService.asmx"
+            WebServiceURL = encodeURI("http://proj.ruppin.ac.il/cegroup10/WebService.asmx/ClearCart");
             $.ajax(
                 {
-                    url: WebServiceURL + "/ClearCart",
+                    url: WebServiceURL,
                     dataType: "json",
                     type: "POST", //use only POST!
-                    data: {},
+                    data: JSON.stringify({ UserId: UserLoginObj[0].Id }),
                     contentType: "application/json; charset=utf-8",
                     error: function (jqXHR, exception) {
                         alert(formatErrorMessage(jqXHR, exception));
                     },
                     success: function (data) {
-                        var ProductsObj = JSON.parse(data.d); //or data["d"]
-                        var resStr = '';
-                        var sum = 0;;
-                        // if (!listCreated) {
+
                         $("#CartFill").empty(); //clear the ProductFill Previous "append"
-                        $("#CartFill").append("<h2> Products For Purchase </h2>");
-                        for (var i = 0; i < ProductsObj.length; i++) {
-                            //$("#ProductFill").append("<li><a href=" + "#products" + " id=" + UsersObj[i].Category + " onclick=TopicClick(this)" + "><img src=" + "Pics/products/cola.jpg" + " /><h2>" + UsersObj[i].Description + "</h2></a></li>     ");
-                            $("#CartFill").append("<li><a href=" + "#" + " id=" + ProductsObj[i].Name + " onclick=RemoveFromCart(this)" + "><img src=" + "Pics/catagories/Clean.jpg" + " /><h2>" + ProductsObj[i].Name + "</h2><p>" + ProductsObj[i].Description + " $" + ProductsObj[i].Price + "" + "</p></a></li>     ");
-                            sum += ProductsObj[i].Price;
-                            //$("#list").listview("refresh");
-                        }
-                        $("#CartSum").append("Total Of: $" + sum);
+                        $("#CartSum").empty();
 
                         location.href = '#cart';
-
-
-
-
-                        //  }
-                        // $('#res').html(resStr);
                     }
 
                 })
@@ -461,8 +515,47 @@
         }
 
     </script>
+    <script>
+        //________________signout page start________________//
+
+        function signout() {
+
+            location.href = '#login';
+            UserLoginObj[0] = { Id: -1, Name: -1, PhoneNumber: -1, UserName: -1, Password: -1, Email: -1 };
+            for (var i = 1; i <= 11; i++)
+                $("#user" + i + "").empty();
+            $("#CartFill").empty(); //clear the ProductFill Previous "append"
+            $("#CartSum").empty();
+            $("#OrdersFill").empty(); //clear the ProductFill Previous "append"
+            $("#OrdersSum").empty();
+            $('#notgeust').empty();
+            $('#carthegeust').empty();
 
 
+        }
+
+        //________________signout page start________________//
+
+    </script>
+    <script>
+        //__________________________pay page________________//
+        function OrderBy() {
+
+
+            $("#GuestOrder").empty();
+            $("#GuestOrder").append("<label for=\"txt-NameGuest\">" + UserLoginObj[0].Name + "</label><label for=\"txt-EmailGuest\">" + UserLoginObj[0].Email + "</label>");
+            $("#TopicFill2").empty();
+
+            $("#OrdersSum").empty();
+            $("#OrdersSum").append("Total of: " + sum + "$");
+            $("#CartSum").empty();
+            $("#CartSum").append("Total of: 0$");
+            location.href = '#pay';
+        }
+
+
+        //__________________________pay page________________//
+    </script>
 
 
 
@@ -475,14 +568,14 @@
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div role="main" class="ui-content">
                     <h2 class="mc-text-center">Welcome to "Top Shop"!</h2>
                     <p class="mc-top-margin-1-5"><b>Existing Users</b></p>
                     <a href="#signin" class="ui-btn ui-btn-b ui-corner-all">Sign In</a>
                     <p class="mc-top-margin-1-5"><b>Don't have an account?</b></p>
                     <a href="#signup" class="ui-btn ui-btn-b ui-corner-all">Sign Up</a>
-                    <p class="mc-top-margin-1-5"><a href="#shop">Enter as guest</a></p>
+                    <p class="mc-top-margin-1-5"><a href="#home">Enter as guest</a></p>
                     <p></p>
                 </div>
             </div>
@@ -491,6 +584,7 @@
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user1"></h4>
             </div>
         </div>
         <!--==================================================the login page==========================================-->
@@ -500,34 +594,20 @@
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div role="main" class="ui-content">
                     <h3>Sign In</h3>
-                    <label for="txt-email">Email Address</label>
-                    <input type="text" name="txt-email" id="txt-email" value="">
-                    <label for="txt-password">Password</label>
-                    <input type="password" name="txt-password" id="txt-password" value="">
-
-                    <fieldset data-role="controlgroup">
-                        <input type="checkbox" name="chck-rememberme" id="chck-rememberme" checked="" />
-                        <label for="chck-rememberme">Remember me</label>
-                    </fieldset>
-
-                    <a href="#dlg-invalid-credentials" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
-                    <p class="mc-top-margin-1-5"><a href="begin-password-reset.html">Can't access your account?</a></p>
-                    <p class="mc-top-margin-1-5"><a href="#shop">Enter as guest</a></p>
-                    <div data-role="popup" id="dlg-invalid-credentials" data-dismissible="false" style="max-width: 400px;">
-                        <div role="main" class="ui-content">
-                            <h3 class="mc-text-danger">Login Failed</h3>
-                            <p>Did you enter the right credentials?</p>
-                            <div class="mc-text-center"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
-                        </div>
-                    </div>
+                    <label for="txt-userNameV">User Name</label>
+                    <input type="text" name="txt-userNameV" id="txt-userNameV" value="">
+                    <label for="txt-passwordV">Password</label>
+                    <input type="password" name="txt-passwordV" id="txt-passwordV" value="">
+                    <input id="btnsubmit" type="button" value="Login" />
                 </div>
 
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user2"></h4>
             </div>
         </div>
         <!--==================================================the signin page==========================================-->
@@ -537,19 +617,21 @@
             <div data-role="header" data-position="fixed">
 
             </div>
-            <div data-role="content">
+            <div data-role="content" >
 
                 <h3>Sign Up</h3>
-                <label for="txt-first-name">First Name</label>
-                <input id="txt-first-name" type="text" />
-                <label for="txt-last-name">Last Name</label>
-                <input id="txt-last-name" type="text" />
-                <label for="txt-email">Email Address</label>
-                <input id="txt-email" type="text" />
-                <label for="txt-password">Password</label>
-                <input id="txt-password" type="text" />
-                <label for="txt-password-confirm">Confirm Password</label>
-                <input id="txt-password-confirm" type="text" />
+                <label>Your Name</label>
+                <input id="txt-name" type="text" />
+                <label>User Name</label>
+                <input id="txt-userName" type="text" />
+                <label>Email</label>
+                <input id="txt-Uemail" type="text" />
+                <label>Phone Number</label>
+                <input id="txt-phoneNumber" type="text" />
+                <label>Password</label>
+                <input id="txt-Upassword" type="text" />
+                <label>Confirm Password</label>
+                <input id="txt-confirm-cassword" type="text" />
                 <input onclick="location.href='#shop'" id="btnsubmit" type="button" value="submit" />
             </div>
 
@@ -560,7 +642,7 @@
         </div>
 
         <!--==================================================the signup page==========================================-->
-        <!--==================================================the Order page==========================================-->
+        <!--==================================================the Home page==========================================-->
         <div data-role="page" id="home" data-theme="a">
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
@@ -569,25 +651,27 @@
                     <ul>
                         <li><a href="#shop">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
-                        <li><a href="#cart">Cart</a></li>
-                        <li><a href="#orders" class="ui-state-persist">Orders</a></li>
-                        <li><a href="#login">SignOut</a></li>
+                        <li><a href="#cart" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" class="ui-state-persist" onclick="LoadTable('Order')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
                     </ul>
                 </div>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div>
-                    <h2 class="mc-text-center">Welcome To Top Shop!</h2>
-                    <img src="Pics/shop.png" data-inset="true" />
-                </div>
+                    <h2 class=" mc-text-center">
+                Welcome To Top Shop!</h2>
+                <img src="Pics/shop.png" data-inset="true" />
+            </div>
 
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user3"></h4>
             </div>
         </div>
 
-        <!--==================================================the Order page==========================================-->
+        <!--==================================================the Home page==========================================-->
         <!--==================================================the shop page==========================================-->
 
         <div data-role="page" id="shop" data-theme="a">
@@ -598,52 +682,22 @@
                     <ul>
                         <li><a href="#shop" class="ui-state-persist">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
-                        <li><a href="#cart">Cart</a></li>
-                        <li><a href="#orders">Orders</a></li>
-                        <li><a href="#login">SignOut</a></li>
+                        <li><a href="#cart" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" onclick="LoadTable('Orders')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
                     </ul>
                 </div>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div data-role="main" class="ui-content">
                     <h2>Product Catagories</h2>
-                    <ul data-role="listview" data-inset="false" id="TopicFill">
-
-                        <!--<li>
-                            <a href="#products">
-                                <img src="Pics/catagories/Clean.jpg" />
-                                <h2 id="yoyo"></h2>
-                                <p>This is Topic 1 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#products">
-                                <img src="Pics/catagories/gen.jpg" />
-                                <h2>Topic 2</h2>
-                                <p>This is Topic 2 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#products">
-                                <img src="Pics/catagories/Generic-products.jpg" />
-                                <h2>Topic 2</h2>
-                                <p>This is Topic 2 Description</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#products">
-                                <img src="Pics/catagories/generic-tp.jpg" />
-                                <h2>Topic 2</h2>
-                                <p>This is Topic 2 Description</p>
-                            </a>
-                        </li>-->
-
-                    </ul>
+                    <ul data-role="listview" data-inset="false" id="TopicFill1"></ul>
                 </div>
 
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user4"></h4>
             </div>
         </div>
 
@@ -652,10 +706,25 @@
         <div data-role="page" id="yad2" data-theme="a">
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#shop">Shop</a></li>
+                        <li><a href="#yad2" class="ui-state-persist">yad2</a></li>
+                        <li><a href="#cart" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" onclick="LoadTable('Orders')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
+                    </ul>
+                </div>
             </div>
 
-            <div data-role="content">
-                <a data-role="content" href="#yad2create" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">Add your product</a>
+            <div data-role="content" >
+                <div data-role="main" class="ui-content">
+                    <h2>Product Catagories</h2>
+                    <ul data-role="listview" data-inset="false" id="TopicFill2"></ul>
+                </div>
+                <div id="notgeust">
+                </div>
                 <div data-role="footer" data-position="fixed">
 
                 </div>
@@ -664,6 +733,7 @@
 
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user5"></h4>
             </div>
         </div>
         <!--==================================================yad2 create page=======================================-->
@@ -671,55 +741,42 @@
             <div data-role="header" data-position="fixed">
                 <h1>Top Shop</h1>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div role="main" class="ui-content">
                     <h3>Add Your Product</h3>
                     <div class="ui-field-contain">
                         <label for="select-native-1">Choose Categories:</label>
-                        <select name="select-native-1" id="select-native-1">
-                            <option value="1">The 1st Option</option>
-                            <option value="2">The 2nd Option</option>
-                            <option value="3">The 3rd Option</option>
-                            <option value="4">The 4th Option</option>
+                        <select name="select-native-1" id="txt-Category">
+                            <option value="SUP">SUP</option>
+                            <option value="Surfboard">Surfboard</option>
+                            <option value="Kitesurf">Kitesurf</option>
+                            <option value="Accessories">Accessories</option>
                         </select>
                     </div>
+                    <label for="txt-Product-Name">Product Name</label>
+                    <input type="text" id="txt-Product-Name" value="">
                     <label for="txt-last-name">Product Description</label>
-                    <input type="text" name="txt-pdescription" id="txt-pdescription" value="">
+                    <input type="text" id="txt-Description" value="">
                     <label for="txt-email">Product Price</label>
-                    <input type="text" name="txt-price" id="txt-price" value="">
+                    <input type="text" id="txt-Price" value="">
                     <label for="txt-email">Phone Number</label>
-                    <input type="text" name="txt-price" id="txt-price" value="">
+                    <input type="text" id="txt-Phone-Number" value="">
                     <label for="txt-password">Add Photo</label>
 
                     <div style="text-align : center;">
-                        <img id="imgPH" src="Pics/addpic.png" height="150" width="150" />
+                        <img id="imgPH" name="" src="Pics/addpic.png" height="150" width="150" />
                     </div>
                     <button id="btnCamera">Camera</button>
+                    <input id="btn" type="button" value="upload your product" />
+                    <a href="#yad2" class="ui-btn ui-btn-b ui-corner-all">Go Back</a>
 
-
-                    <i class="fa fa-camera-retro fa-2x myIcon" title="Edit"></i>  <!--comment to your right=> -->                     <!--all 4 comment are the part-->
-                    <input type="file" id="fileUpload" name="image" accept="image/*" capture>                                         <!--for the up load image -->
-                    <!--<a href="#" id="btn_cam_test class=" ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>-->           <!--in web server need to update-->
-                    <input id="btn" type="button" value="CamSubmit" />                                                                   <!--the folder to save image -->
-
-
-                    <a href="#dlg-sign-up-sent" data-rel="popup" data-transition="pop" data-position-to="window" id="btn-submit" class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">Submit</a>
-                    <div data-role="popup" id="dlg-sign-up-sent" data-dismissible="false" style="max-width: 400px;">
-                        <div data-role="header">
-                            <h1>Almost done...</h1>
-                        </div>
-                        <div role="main" class="ui-content">
-                            <h3>Confirm Your Email Address</h3>
-                            <p>We sent you an email with instructions on how to confirm your email address. Please check your inbox and follow the instructions in the email.</p>
-                            <div class="mc-text-center"><a href="sign-in.html" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">OK</a></div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
 
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user6"></h4>
             </div>
         </div>
         <!--==================================================yad2 create page end=======================================-->
@@ -733,58 +790,27 @@
                     <ul>
                         <li><a href="#shop">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
-                        <li><a href="#cart" class="ui-state-persist">Cart</a></li>
-                        <li><a href="#orders">Orders</a></li>
-                        <li><a href="#login">SignOut</a></li>
+                        <li><a href="#cart" class="ui-state-persist" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" onclick="LoadTable('Orders')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
                     </ul>
                 </div>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div role="main" class="ui-content">
-                   
-                    <ul data-role="listview" data-inset="false" id="CartFill" data-icon="delete">
 
-                        <!-- <li>
-             <a href="#ProductDiscription" id="hello">
-                 <img src="Pics/products/beer-generic.jpg" />
-                 <h2>Product 1</h2>
-                 <p>This is Product 1 Description</p>
-             </a>
-         </li>
-         <li>
-             <a href="#ProductDiscription">
-                 <img src="Pics/products/cola.jpg" />
-                 <h2>Product 2</h2>
-                 <p>This is Product 2 Description</p>
-             </a>
-         </li>
-         <li>
-             <a href="#ProductDiscription">
-                 <img src="Pics/products/water.jpg" />
-                 <h2>Product 3</h2>
-                 <p>This is Product 3 Description</p>
-             </a>
-         </li>
-         <li>
-             <a href="#ProductDiscription">
-                 <img src="Pics/products/wine.jpg" />
-                 <h2>Product 4</h2>
-                 <p>This is Product 4 Description</p>
-             </a>
-         </li>
-            -->
-                    </ul>
+                    <ul data-role="listview" data-inset="false" id="CartFill" data-icon="delete"></ul>
 
-                   
-                        <p class="mc-top-margin-1-5" id="CartSum"><b></b></p>
-                    <a href="#pay" class="ui-btn ui-btn-b ui-corner-all" id="ClearCart" onclick="ClearCart()">Clear Cart</a>
-                        <a href="#pay" class="ui-btn ui-btn-b ui-corner-all">Pay</a>
-                
+
+                    <p class="mc-top-margin-1-5" id="CartSum"><b></b></p>
+                    <div id="carthegeust"></div>
+
                 </div>
 
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user7"></h4>
             </div>
         </div>
         <!--==================================================the cart page==========================================-->
@@ -797,51 +823,22 @@
                     <ul>
                         <li><a href="#shop" class="ui-state-persist">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
-                        <li><a href="#cart">Cart</a></li>
-                        <li><a href="#orders">Orders</a></li>
-                        <li><a href="#login">SignOut</a></li>
+                        <li><a href="#cart" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" onclick="LoadTable('Orders')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
                     </ul>
                 </div>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div data-role="main" class="ui-content">
                     <h2 id="ProductsHead"></h2>
-                    <ul data-role="listview" data-inset="false" id="ProductFill" data-icon="plus">
-                        <!--      <li>
-                                   <a href="#ProductDiscription">
-                                       <img src="Pics/products/beer-generic.jpg" />
-                                       <h2>Product 1</h2>
-                                       <p>This is Product 1 Description</p>
-                                   </a>
-                               </li>
-                               <li>
-                                   <a href="#ProductDiscription">
-                                       <img src="Pics/products/cola.jpg" />
-                                       <h2>Product 2</h2>
-                                       <p>This is Product 2 Description</p>
-                                   </a>
-                               </li>
-                               <li>
-                                   <a href="#ProductDiscription">
-                                       <img src="Pics/products/water.jpg" />
-                                       <h2>Product 3</h2>
-                                       <p>This is Product 3 Description</p>
-                                   </a>
-                               </li>
-                               <li>
-                                   <a href="#ProductDiscription">
-                                       <img src="Pics/products/wine.jpg" />
-                                       <h2>Product 4</h2>
-                                       <p>This is Product 4 Description</p>
-                                   </a>
-                               </li>
-                            -->
-                    </ul>
+                    <ul data-role="listview" data-inset="false" id="ProductFill" data-icon="plus"> </ul>
                 </div>
 
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user8"></h4>
             </div>
         </div>
         <!--==================================================the products page==========================================-->
@@ -854,13 +851,13 @@
                     <ul>
                         <li><a href="#shop" class="ui-state-persist">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
-                        <li><a href="#cart">Cart</a></li>
-                        <li><a href="#orders">Orders</a></li>
-                        <li><a href="#login">SignOut</a></li>
+                        <li><a href="#cart" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" onclick="LoadTable('Orders')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
                     </ul>
                 </div>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <div>
                     <h2 class="mc-text-center">This is Product Description</h2>
                     <img src="Pics/products/generic.jpg" style="width: 100%;" />
@@ -873,6 +870,7 @@
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user9"></h4>
             </div>
         </div>
         <!--==================================================the productDescription page==========================================-->
@@ -885,18 +883,17 @@
                     <ul>
                         <li><a href="#shop" class="ui-state-persist">Shop</a></li>
                         <li><a href="#yad2">yad2</a></li>
-                        <li><a href="#cart">Cart</a></li>
-                        <li><a href="#orders">Orders</a></li>
-                        <li><a href="#login">SignOut</a></li>
+                        <li><a href="#cart" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" onclick="LoadTable('Orders')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
                     </ul>
                 </div>
             </div>
-            <div data-role="content">
+            <div data-role="content" >
                 <h4>User Information</h4>
-                <label for="txt-first-name">First Name</label>
-                <input type="text" name="txt-first-name" id="txt-first-name" value="">
-                <label for="txt-last-name">Last Name</label>
-                <input type="text" name="txt-last-name" id="txt-last-name" value="">
+
+                <p id="GuestOrder"></p>
+
 
                 <h4>Credit Card Information</h4>
                 <label for="txt-email">Credit Card Number</label>
@@ -905,17 +902,51 @@
                 <input type="text" name="txt-date" id="txt-date" value="" placeholder="mm/yy">
 
                 <fieldset data-role="controlgroup">
-                    <p class="mc-top-margin-1-5"><b>Total of 999$</b></p>
-                    <a href="#pay" class="ui-btn ui-btn-b ui-corner-all">Pay</a>
+                    <p class="mc-top-margin-1-5"><b id="OrderSum"></b></p>
+                    <a href="#cart" class="ui-btn ui-btn-b ui-corner-all" id="p" onclick="PayToOrder()">Pay</a>
                 </fieldset>
 
             </div>
             <div data-role="footer" data-position="fixed">
                 <h1>TM Yoni&Ohad</h1>
+                <h4 id="user10"></h4>
             </div>
         </div>
 
         <!--==================================================the pay page==========================================-->
+        <!--==================================================Order page==============================================-->
+        <div data-role="page" id="Orders" data-theme="a">
+            <div data-role="header" data-position="fixed">
+                <h1>Top Shop</h1>
+                <div data-role="navbar" class="flow" data-position="fixed">
+                    <!-- /navbar -->
+                    <ul>
+                        <li><a href="#shop">Shop</a></li>
+                        <li><a href="#yad2">yad2</a></li>
+                        <li><a href="#cart" onclick="LoadTable('Cart')">Cart</a></li>
+                        <li><a href="#Orders" class="ui-state-persist" onclick="LoadTable('Orders')">Orders</a></li>
+                        <li><a href="#login" onclick="signout()">SignOut</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div data-role="content" >
+                <div role="main" class="ui-content">
+
+                    <ul data-role="listview" data-inset="false" id="OrdersFill" data-icon="delete"></ul>
+
+
+
+
+                </div>
+                <p class="mc-top-margin-1-5" id="OrdersSum"><b></b></p>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <h1>TM Yoni&Ohad</h1>
+                <h4 id="user11"></h4>
+            </div>
+        </div>
+        <!--==================================================Order page==============================================-->
+
     </form>
 </body>
 </html>
